@@ -1,0 +1,806 @@
+<!doctype html><html lang="kk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AI PROMPT LAB — педагогикалық конструктор</title><style>
+:root{
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --bg:#f7f8fc;--ink:#101426;--muted:#697089;--line:#e5e7f0;--card:#fff;
+  --indigo:#5b4dff;--violet:#8b5cf6;--cyan:#18b9e6;--green:#20b486;
+  --shadow:0 24px 70px rgba(25,31,70,.10);
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:
+  radial-gradient(circle at 18% -10%,rgba(91,77,255,.13),transparent 28%),
+  radial-gradient(circle at 92% 6%,rgba(24,185,230,.11),transparent 24%),
+  linear-gradient(#fbfcff,#f5f7fc);color:var(--ink);min-height:100vh}
+button,input,textarea,select{font:inherit}
+.wrap{max-width:1580px;margin:auto;padding:18px 28px 34px}
+.topnav{height:58px;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:900;letter-spacing:-.02em}
+.brandmark{width:35px;height:35px;border-radius:11px;display:grid;place-items:center;color:white;
+ background:linear-gradient(135deg,#6157ff,#8f4dff 58%,#23bce6);box-shadow:0 8px 20px rgba(91,77,255,.25)}
+.navright{display:flex;gap:9px;align-items:center}
+.pill{border:1px solid #e1e4ef;background:rgba(255,255,255,.76);backdrop-filter:blur(10px);
+ padding:8px 12px;border-radius:999px;color:#505873;font-size:12px;font-weight:750}
+.showcaseBtn{border:0;background:#101426;color:white;padding:9px 14px;border-radius:999px;font-weight:800;cursor:pointer}
+header.hero{position:relative;overflow:hidden;border-radius:28px;padding:34px 38px 32px;margin-bottom:22px;
+ background:linear-gradient(115deg,#151a38 0%,#24275d 48%,#4b35a5 100%);color:white;
+ box-shadow:0 28px 70px rgba(35,38,90,.22)}
+header.hero:before{content:"";position:absolute;width:390px;height:390px;border-radius:50%;right:-90px;top:-220px;
+ background:radial-gradient(circle,rgba(35,205,255,.55),rgba(116,76,255,.12) 55%,transparent 72%);filter:blur(2px)}
+header.hero:after{content:"";position:absolute;inset:0;opacity:.18;pointer-events:none;
+ background-image:linear-gradient(rgba(255,255,255,.11) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.11) 1px,transparent 1px);
+ background-size:42px 42px;mask-image:linear-gradient(to right,transparent,black)}
+.heroGrid{position:relative;z-index:1;display:grid;grid-template-columns:1.3fr .7fr;gap:24px;align-items:end}
+.eyebrow{display:inline-flex;gap:8px;align-items:center;color:#bfeeff;font-size:12px;font-weight:850;letter-spacing:.08em;text-transform:uppercase}
+.hero h1{font-size:clamp(34px,4vw,62px);line-height:.98;letter-spacing:-.055em;margin:12px 0 13px;color:white}
+.hero p{max-width:720px;margin:0;color:#d9ddf7;font-size:15px;line-height:1.65}
+.heroStats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.stat{padding:15px;border:1px solid rgba(255,255,255,.14);border-radius:16px;background:rgba(255,255,255,.08);backdrop-filter:blur(10px)}
+.stat b{display:block;font-size:20px}.stat span{font-size:10px;color:#c8cdea;text-transform:uppercase;letter-spacing:.07em}
+.flow{position:relative;z-index:1;margin-top:25px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.flow span{padding:8px 11px;border-radius:10px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.11);font-size:11px;font-weight:750}
+.flow i{font-style:normal;color:#78dcff}
+.workspaceHead{display:flex;align-items:end;justify-content:space-between;margin:26px 2px 13px}
+.workspaceHead h2{font-size:20px;margin:0;letter-spacing:-.025em}.workspaceHead p{font-size:12px;color:var(--muted);margin:5px 0 0}
+main{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(420px,.98fr);gap:18px;align-items:start}
+.panel{background:rgba(255,255,255,.88);border:1px solid rgba(225,228,239,.92);border-radius:22px;overflow:hidden;box-shadow:var(--shadow);backdrop-filter:blur(16px)}
+.builder{padding:8px}
+.section{padding:20px 20px 22px;border-bottom:1px solid #eef0f6;border-radius:16px;transition:.2s}
+.section:hover{background:#fcfcff}.section:last-child{border-bottom:0}
+h2{font-size:14px;margin:0 0 16px;color:#1d2440;display:flex;align-items:center;letter-spacing:-.01em}
+.num{width:28px;height:28px;display:inline-grid;place-items:center;color:#6557e9;background:#f0efff;border:1px solid #dedaff;border-radius:9px;margin-right:10px;font-size:11px}
+label{display:block;font-size:11px;font-weight:800;color:#6b728b;margin:12px 0 6px}
+input,textarea,select{width:100%;background:#fbfbfe;color:#151a31;border:1px solid #dfe3ee;border-radius:11px;padding:11px 12px;min-width:0;transition:.16s}
+textarea{min-height:74px;resize:vertical}select{cursor:pointer}
+input:focus,textarea:focus,select:focus{outline:0;background:white;border-color:#8d83ff;box-shadow:0 0 0 4px rgba(91,77,255,.09)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.checks label{margin:0;display:flex;align-items:center;gap:8px;padding:10px 11px;background:#fafaff;border:1px solid #e5e7f0;border-radius:10px;cursor:pointer;color:#515974}
+.checks label:hover{border-color:#c9c5ff;background:#f8f7ff}.checks input{width:auto;accent-color:#6557e9}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:0;border-radius:10px;padding:10px 13px;font-size:12px;font-weight:850;cursor:pointer;color:white;background:#171b31;transition:.16s}
+.btn:hover{transform:translateY(-1px)}.btn.alt{background:#f4f5fa;color:#4e5671;border:1px solid #e1e4ed}
+#generate{background:linear-gradient(135deg,#5d50ff,#8658f4);box-shadow:0 10px 24px rgba(91,77,255,.20)}
+#recommend{background:linear-gradient(135deg,#4f6cff,#7a55ee);color:white;border:0}
+#surprise{background:linear-gradient(135deg,#11162d,#40386d);color:white;border:0}
+.note{font-size:11px;color:#858ba0;margin-top:8px}.status{color:#178461}.err{color:#b74258}.hidden{display:none!important}
+.preview{position:sticky;top:14px;align-self:start;overflow:hidden;background:#11162b;border:1px solid #2b3154;box-shadow:0 30px 80px rgba(17,22,43,.20)}
+.bar{height:58px;padding:0 16px;display:flex;justify-content:space-between;align-items:center;color:#dce2ff;background:#171d38;border-bottom:1px solid #2c3357}
+.windowdots{display:inline-flex;gap:5px;margin-right:9px}.windowdots i{display:block;width:7px;height:7px;border-radius:50%}.windowdots i:nth-child(1){background:#ff6b7a}.windowdots i:nth-child(2){background:#ffc85a}.windowdots i:nth-child(3){background:#45d6a0}
+.bar .btn.alt{background:#232a4b;color:#dbe2ff;border-color:#353d66}
+.dot{display:none}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.75 ui-monospace,SFMono-Regular,Consolas,monospace;padding:24px;margin:0;max-height:73vh;overflow:auto;background:
+ radial-gradient(circle at 100% 0,rgba(103,78,255,.16),transparent 28%),#11162b;color:#d9e1ff}
+pre::selection{background:#6557e9;color:white}
+.recommend-box{margin-top:14px;padding:13px;background:#f8f7ff;border:1px solid #dfdcff;border-radius:14px}
+.recommend-title{font-weight:900;color:#5147bb;margin-bottom:8px}
+.design-choice{padding:11px 12px;margin:7px 0;background:white;border:1px solid #e4e2f4;border-radius:11px;cursor:pointer;transition:.16s}
+.design-choice:hover{transform:translateX(3px);border-color:#9c94ee}
+footer{font-size:11px;color:#8a90a4;padding:20px 4px;text-align:center}
+
+/* Showcase mode */
+body.showcase .topnav .pill,body.showcase .builder,body.showcase .workspaceHead p,body.showcase footer{display:none}
+body.showcase .wrap{max-width:1480px}
+body.showcase header.hero{min-height:330px;display:flex;align-items:center}
+body.showcase main{grid-template-columns:1fr}
+body.showcase .preview{position:relative;top:0;max-width:1120px;width:100%;margin:auto}
+body.showcase pre{max-height:55vh;font-size:15px;line-height:1.8}
+body.showcase .workspaceHead{justify-content:center;text-align:center}
+body.showcase .workspaceHead h2:after{content:" · SHOWCASE";color:#6557e9;font-size:11px;margin-left:8px;letter-spacing:.08em}
+
+@media(max-width:980px){main{grid-template-columns:1fr}.preview{position:static}.heroGrid{grid-template-columns:1fr}.heroStats{max-width:500px}}
+@media(max-width:620px){.wrap{padding:10px}.two,.checks{grid-template-columns:1fr}.hero{padding:25px!important;border-radius:22px!important}.heroStats{grid-template-columns:1fr 1fr}.topnav .pill{display:none}.workspaceHead{align-items:start;flex-direction:column;gap:8px}}
+
+.modeSwitch{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 20px}
+.modeCard{position:relative;text-align:left;padding:18px 20px;border-radius:18px;border:1px solid #e2e5f0;background:rgba(255,255,255,.9);cursor:pointer;transition:.2s;box-shadow:0 10px 30px rgba(31,39,82,.06)}
+.modeCard:hover{transform:translateY(-2px);border-color:#bcb6ff}.modeCard.active{color:white;border-color:transparent;background:linear-gradient(125deg,#1b2146,#5141c9 62%,#7656ef);box-shadow:0 18px 42px rgba(70,58,180,.22)}
+.modeCard b{display:block;font-size:15px;margin-bottom:4px}.modeCard span{font-size:11px;opacity:.78;line-height:1.45}
+.teacherTabs{display:flex;gap:8px;margin-bottom:15px;padding:5px;background:#f2f3f9;border-radius:13px}
+.teacherTab{flex:1;border:0;border-radius:9px;padding:10px 12px;background:transparent;color:#626981;font-weight:850;cursor:pointer}
+.teacherTab.active{background:white;color:#322a89;box-shadow:0 5px 15px rgba(40,44,80,.08)}
+.teacherHero{padding:18px;border-radius:15px;margin-bottom:14px;background:linear-gradient(135deg,#f5f4ff,#edf9ff);border:1px solid #deddf5}
+.teacherHero b{font-size:14px}.teacherHero p{font-size:11px;color:#6f7691;line-height:1.5;margin:6px 0 0}
+.teacherToolGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+.teacherTool{padding:11px;border:1px solid #e1e4ef;background:#fbfbfe;border-radius:11px;cursor:pointer;font-size:11px;font-weight:750;color:#4b536d;transition:.15s}
+.teacherTool:hover,.teacherTool.active{border-color:#8f86ef;background:#f4f2ff;color:#4438b3}
+.teacherParams{margin-top:14px;padding:14px;border:1px solid #e3e5ef;border-radius:13px;background:#fafbfe}
+.modeHidden{display:none!important}
+@media(max-width:620px){.modeSwitch,.teacherToolGrid{grid-template-columns:1fr}}
+
+#toolOptions{display:grid;grid-template-columns:1fr 1fr;gap:6px;max-height:270px;overflow:auto;border:1px solid #d8dcef;padding:10px;border-radius:12px;background:#fafaff}
+#toolOptions .toolChoice{display:flex;gap:9px;align-items:flex-start;margin:0;padding:9px;font-size:13px;line-height:1.45;font-weight:500;border-radius:8px;cursor:pointer;color:#283653}
+#toolOptions .toolChoice:has(input:checked){background:#e9e5ff;color:#4235ad}#toolOptions input{width:18px;height:18px;flex-shrink:0;margin:0;accent-color:#6755df}
+#selectedTools{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0;font-size:13px;color:#67738c}.toolChip{border:1px solid #a89ae7;border-radius:20px;background:#f0ebff;color:#463790;padding:7px 11px;cursor:pointer;font:inherit;max-width:100%;text-align:left}
+.toolParamGroup{border:1px solid #ddd8ed;padding:14px;border-radius:12px;margin:18px 0}.toolParamGroup legend{font-weight:700;color:#5140a2;padding:0 7px}.addToolRow{display:flex;gap:8px}.addToolRow input{min-width:0;flex:1}.addToolRow button{flex-shrink:0}
+@media(max-width:480px){#toolOptions{grid-template-columns:1fr}}
+[hidden]{display:none!important}.qmjCheck{display:flex!important;gap:10px;align-items:center}.qmjCheck input{width:18px!important;height:18px;flex-shrink:0}#qmjPanel textarea{min-height:90px}#teacherMessage{font-size:13px;line-height:1.5}
+.modeSwitch{grid-template-columns:repeat(3,1fr)}
+#cardStudio{display:grid;grid-template-columns:minmax(300px,.85fr) minmax(420px,1.3fr);gap:22px;margin:22px 0}
+.studioForm,.studioView{border:1px solid #e0e5ed;border-radius:24px;background:white;padding:26px}
+.studioForm h2,.studioView h2{margin:0 0 8px;font-size:23px;letter-spacing:-.5px}
+.studioLead{color:#68758a;font-size:13px;line-height:1.6;margin:0 0 20px}
+.studioTag{font-size:11px;letter-spacing:2px;color:#337c71;font-weight:800;margin-bottom:10px}
+.studioForm label{margin-top:14px}.studioForm textarea{min-height:120px}
+.studioView{background:#f0f4f3}.studioToolbar{display:flex;justify-content:space-between;gap:14px;align-items:center;margin-bottom:18px}
+.studioGrid{display:grid;gap:9px;padding:16px;background:#fff;box-shadow:0 12px 32px #18312b12;border-radius:12px}
+.studioCell{aspect-ratio:3/4;border:1px solid #c6d7d1;border-radius:7px;padding:10px;background:#edf4f1;display:flex;flex-direction:column;gap:8px;min-width:0}
+.studioCell b{font-size:12px;color:#24554b}.studioGlyph{flex:1;display:grid;place-items:center;font-size:28px;color:#548878;background:linear-gradient(140deg,#d5e6df,#f4f8f6);border-radius:5px}.studioLines{height:20px;background:repeating-linear-gradient(transparent 0 8px,#b6c9c2 8px 9px)}
+#studioPrompt{white-space:pre-wrap;font-family:inherit;font-size:14px;line-height:1.8;background:white;border:1px solid #dde5df;border-radius:12px;padding:20px;max-height:440px;overflow:auto}
+#studioStatus{min-height:24px;color:#337c71;font-size:13px;margin-top:12px}.studioView .actions{flex-wrap:wrap}
+@media(max-width:800px){#cardStudio{grid-template-columns:1fr}.modeSwitch{grid-template-columns:1fr}.studioForm,.studioView{padding:18px}.studioCell{padding:5px;gap:4px}.studioCell b{font-size:9px}}
+</style></head><body><div class="wrap">
+<nav class="topnav">
+  <div class="brand"><div class="brandmark">AI</div><span>AI PROMPT LAB</span></div>
+  <div class="navright"><span class="pill">PROMPT ENGINEERING · EDTECH</span><button class="showcaseBtn" id="showcase" type="button">◉ Showcase Mode</button></div>
+</nav>
+<header class="hero">
+  <div class="heroGrid">
+    <div>
+      <div class="eyebrow">✦ Intelligent Prompt Workspace</div>
+      <h1>Idea → Prompt<br>→ Learning Product</h1>
+      <p>Педагогикалық идеяны құрылымды, техникалық тұрғыдан нақты промптқа айналдыратын авторлық конструктор. Құрал түріне қарай параметрлер бейімделеді, ал нәтиже нақты уақытта құрастырылады.</p>
+    </div>
+    <div class="heroStats">
+      <div class="stat"><b>Live</b><span>Prompt composer</span></div>
+      <div class="stat"><b>Smart</b><span>Dynamic logic</span></div>
+      <div class="stat"><b>Local</b><span>Private by design</span></div>
+    </div>
+  </div>
+  <div class="flow"><span>01 · Context</span><i>→</i><span>02 · Pedagogy</span><i>→</i><span>03 · Tool logic</span><i>→</i><span>04 · Visual system</span><i>→</i><span>05 · Prompt</span></div>
+</header>
+
+<div class="modeSwitch"><button class="modeCard" id="paperMode" type="button"><b>▦ КӨРНЕКІ МАТЕРИАЛДАР</b><span>Қағаз материалдарына арналған қысқа промпт. Өз үлгіңіз, өз параметрлеріңіз.</span></button>
+  <button class="modeCard active" id="classroomMode" type="button"><b>🎓 FOR CLASSROOM</b><span>Оқушымен сабақта қолданылатын интерактивті оқу құралдары мен цифрлық тапсырмалар.</span></button>
+  <button class="modeCard" id="teacherMode" type="button"><b>💼 FOR TEACHER</b><span>Мұғалімнің педагогикалық жұмысы, цифрлық өнімдері және автоматтандыру міндеттері.</span></button>
+</div>
+<div class="workspaceHead"><div><h2>Prompt Workspace</h2><p>Параметрлерді өзгертіңіз — құрылымды промпт бірден жаңарады.</p></div><span class="pill">● LIVE COMPOSER</span></div>
+<main id="classroomWorkspace"><div class="panel builder"><div class="section"><h2><span class="num">01</span>Тақырып туралы</h2><label for="subject">Пән</label><input id="subject" list="subjects" placeholder="Мысалы: Қазақ тілі"><datalist id="subjects"><option value="Қазақстан тарихы"><option value="Дүниежүзі тарихы"><option value="Қазақ тілі"><option value="Математика"><option value="Биология"><option value="География"><option value="Физика"><option value="Химия"><option value="Информатика"><option value="Құқық негіздері"></datalist><label for="topic">Тақырып *</label><input id="topic" placeholder="Мысалы: Зат есім" required><div class="two"><div><label for="audience">Оқушы аудиториясы *</label><input id="audience" placeholder="Мысалы: 4-сынып" required></div><div><label for="toolSearch">Құралды іздеу</label><input id="toolSearch" placeholder="Мысалы: викторина, симулятор..."></div></div><label for="category">Құрал санаты</label><select id="category"></select><label id="toolLabel">Құрал түрлері *</label><p class="note">Бірнеше құралды белгілеңіз. Олар бір өнімнің жеке бөлімдері ретінде промптқа қосылады.</p><div id="selectedTools" aria-live="polite"></div><div id="toolOptions" role="group" aria-labelledby="toolLabel"></div><label for="customTool">Тізімде жоқ құралды қосу</label><div class="addToolRow"><input id="customTool" placeholder="Құралдың атауын жазыңыз"><button type="button" class="btn alt" id="addCustomTool">Қосу</button></div><div class="note" id="count"></div></div><div class="section"><h2><span class="num">02</span>Оқу мақсаты</h2><label for="goal">Оқушы нені меңгеруі керек? *</label><textarea id="goal" placeholder="Мысалы: зат есімді басқа сөз таптарынан ажыратады"></textarea><div class="two"><div><label for="difficulty">Деңгей</label><select id="difficulty"><option>Бастапқы</option><option selected>Орташа</option><option>Жоғары</option><option>Үш деңгейлі саралау</option></select></div><div><label for="language">Тіл</label><select id="language"><option>Қазақша</option><option>Орысша</option><option>Ағылшынша</option></select></div></div><label for="bloom">Блум деңгейі</label><select id="bloom"><option>Мақсатқа сәйкес таңда</option><option>Білу</option><option>Түсіну</option><option>Қолдану</option><option>Талдау</option><option>Жинақтау / жасау</option><option>Бағалау</option><option>Барлық деңгей</option></select></div><div class="section"><h2><span class="num">03</span>Функциялар</h2><div class="checks" id="features"></div><div id="conditional"></div></div><div class="section"><h2><span class="num">04</span>Дизайн және техникалық талаптар</h2><div class="two"><div><label for="style">Визуалды стиль</label><select id="style"><option>Академиялық</option><option>Ғылыми</option><option>Ресми</option><option>Энциклопедиялық</option><option>Оқулық стилі</option><option>Архивтік</option><option>Газет стилі</option><option>Инфографикалық</option><option>Dashboard</option><option>Заманауи</option><option>Минимализм</option><option>Clean UI</option><option>Flat Design</option><option>Material Design</option><option>Soft UI</option><option>Glassmorphism</option><option>Neumorphism</option><option>Bento Grid</option><option>Card UI</option><option>Gradient UI</option><option>Futuristic</option><option>High-tech</option><option>Ойын стилі</option><option>Мультфильм</option><option>Комикс</option><option>Quiz Show</option><option>Game Show</option><option>Arcade</option><option>Pixel Art</option><option>Retro Game</option><option>Board Game</option><option>Квест</option><option>Escape Room</option><option>Adventure</option><option>Fantasy</option><option>RPG</option><option>Детектив</option><option>Treasure Hunt</option><option>Ғарыштық</option><option>Тарихи</option><option>Винтаж</option><option>Архив құжаты</option><option>Ескі қолжазба</option><option>Пергамент</option><option>Ескі карта</option><option>Мұражай</option><option>Археологиялық</option><option>Ортағасырлық</option><option>Антикалық</option><option>Әскери штаб картасы</option><option>Ұлы Дала</option><option>Қазақы ұлттық</option><option>Этнографиялық</option><option>Кеңестік плакат</option><option>ХХ ғасыр газеті</option><option>Акварель</option><option>Қолмен салынған</option><option>Sketch</option><option>Doodle</option><option>Paper Cut</option><option>Collage</option><option>Scrapbook</option><option>Origami</option><option>Clay</option><option>3D</option><option>Isometric</option><option>Геометриялық</option><option>Абстрактілі</option><option>Storybook</option><option>Постер</option><option>Eco</option><option>Nature</option><option>Botanical</option><option>Forest</option><option>Ocean</option><option>Earth</option><option>Eco-futurism</option><option>Мобильді қосымша</option><option>Веб-қосымша</option><option>Интерактивті тақта</option><option>Код редакторы</option><option>Чат интерфейсі</option><option>Виртуалды зертхана</option><option>Симулятор панелі</option><option>Карта интерфейсі</option><option>Таймлайн интерфейсі</option></select></div><div><label for="palette">Түс палитрасы</label><select id="palette"><option>Үйлесімді</option><option>Ашық</option><option>Жарқын</option><option>Пастель</option><option>Бейтарап</option><option>Монохром</option><option>Контрастты</option><option>Жұмсақ</option><option>Қанық</option><option>Салқын түстер</option><option>Жылы түстер</option><option>Қою көк + ақ + сұр</option><option>Көк + ақ</option><option>Қою жасыл + ақ</option><option>Бордо + крем</option><option>Қоңыр + беж</option><option>Графит + ақ</option><option>Изумруд + ақ</option><option>Navy + алтын</option><option>Пергамент + қоңыр</option><option>Сепия</option><option>Қоңыр + алтын</option><option>Бордо + алтын</option><option>Қою жасыл + алтын</option><option>Қара + алтын</option><option>Қола + беж</option><option>Терракота + крем</option><option>Зәйтүн + беж</option><option>Хаки + қоңыр</option><option>Көгілдір + алтын</option><option>Көк + алтын</option><option>Ақ + көгілдір</option><option>Изумруд + алтын</option><option>Қызыл + алтын</option><option>Қою көк + алтын</option><option>Rainbow</option><option>Candy</option><option>Көк + сары</option><option>Көгілдір + қызғылт сары</option><option>Жасыл + сары</option><option>Қызғылт + күлгін</option><option>Mint + сары</option><option>Coral + көгілдір</option><option>Pastel Rainbow</option><option>Қара + ақ</option><option>Графит + қызғылт сары</option><option>Қою сұр + жасыл</option><option>Navy + cyan</option><option>Күлгін + көк</option><option>Көк-күлгін градиент</option><option>Қызғылт-күлгін градиент</option><option>Көгілдір-жасыл градиент</option><option>Neon</option><option>Cyberpunk</option><option>Forest</option><option>Ocean</option><option>Earth</option><option>Desert</option><option>Botanical</option><option>Autumn</option><option>Spring</option><option>Winter</option><option>Eco Green</option><option>Sand & Sage</option><option>Retro</option><option>Vintage</option><option>Newspaper</option><option>Blackboard</option><option>Whiteboard</option><option>Blueprint</option><option>Space</option><option>Sunset</option><option>Sunrise</option></select></div></div>
+<div class="two"><div><label for="customStyle">Өз стилім (міндетті емес)</label><input id="customStyle" placeholder="Мысалы: тарихи + ескі карта + пергамент"></div><div><label for="customPalette">Өз палитрам (міндетті емес)</label><input id="customPalette" placeholder="Мысалы: #EAF2F8, #4169A1, #FFFFFF"></div></div>
+<div class="two">
+  <div><label for="visualBg">Фон</label><select id="visualBg"><option>Автоматты</option><option>Таза</option><option>Жұмсақ градиент</option><option>Карта текстурасы</option><option>Қағаз текстурасы</option><option>Пергамент</option><option>Координаттық тор</option><option>Ұлттық ою</option><option>Абстрактілі glow</option></select></div>
+  <div><label for="visualCards">Карточка стилі</label><select id="visualCards"><option>Автоматты</option><option>Premium cards</option><option>Glass cards</option><option>Құжат карточкалары</option><option>Paper cards</option><option>3D cards</option><option>Bento cards</option><option>Контурлы карточкалар</option></select></div>
+</div>
+<div class="two">
+  <div><label for="visualMotion">Анимация</label><select id="visualMotion"><option>Автоматты</option><option>Жоқ</option><option>Өте жеңіл</option><option>Жұмсақ микроанимация</option><option>Динамикалық</option><option>Ойындық</option></select></div>
+  <div><label for="visualIllustration">Иллюстрация</label><select id="visualIllustration"><option>Автоматты</option><option>Иконкалар</option><option>Тарихи құжаттар</option><option>Карта және схема</option><option>Flat illustration</option><option>3D illustration</option><option>Cartoon</option><option>Инфографика</option></select></div>
+</div>
+<label for="extra">Қосымша талаптар</label><textarea id="extra" placeholder="Мысалы: сұрақтарды тек мен енгізген мәтіннен ал; деректерді ойдан қоспа"></textarea><div class="checks"><label><input type="checkbox" id="offline" checked>Интернетсіз жұмыс</label><label><input type="checkbox" id="single" checked>Бір HTML файл</label><label><input type="checkbox" id="validation" checked>Қате әрекеттерді өңдеу</label><label><input type="checkbox" id="responsive" checked>Телефонға бейімдеу</label></div></div><div class="section"><div class="actions"><button class="btn" id="generate">Промпт құрастыру</button><button class="btn alt" id="reset">Тазалау</button></div><p class="note" id="message" role="status">Өрістерді толтырыңыз. Промпт оң жақта автоматты жаңарады.</p></div></div><div class="panel preview"><div class="bar"><span><span class="windowdots"><i></i><i></i><i></i></span>prompt.md</span><div class="actions"><button class="btn alt" id="copy">Көшіру</button><button class="btn alt" id="download">.md сақтау</button></div></div><pre id="output" aria-live="polite"></pre></div></main>
+<main id="teacherWorkspace" class="modeHidden">
+  <div class="panel builder">
+    <div class="section">
+      <h2><span class="num">T1</span>Мұғалім жұмысының бағыты</h2>
+      <div class="teacherTabs">
+        <button class="teacherTab active" id="pedTab" type="button">📚 Педагогикалық жұмыс</button>
+        <button class="teacherTab" id="digitalTab" type="button">🚀 Цифрлық өнім және автоматтандыру</button>
+      </div>
+      <div class="teacherHero"><b id="teacherDirectionTitle">Педагогикалық жұмыс</b><p id="teacherDirectionDesc">Сабақ жоспарлау, бағалау, саралау, әдістемелік және зерттеу міндеттеріне арналған құрылымды промпттар.</p></div>
+      <label>Құралды таңдаңыз</label>
+      <input id="teacherSearch" placeholder="Мысалы: ҚМЖ, бағалау критерийі, Telegram бот...">
+      <div class="teacherToolGrid" id="teacherToolGrid"></div>
+    </div>
+    <div class="section">
+      <h2><span class="num">T2</span>Негізгі контекст</h2>
+      <div class="two"><div><label>Пән / бағыт</label><input id="tSubject" placeholder="Мысалы: Қазақстан тарихы"></div><div><label>Сынып / аудитория</label><input id="tAudience" placeholder="Мысалы: 9-сынып немесе мұғалімдер"></div></div>
+      <label>Тақырып немесе міндет</label><input id="tTopic" placeholder="Не жасау керек?">
+      <label id="tGoalLabel" for="tGoal">Мақсат</label><textarea id="tGoal" placeholder="Нәтижесінде не алынуы керек?"></textarea>
+    </div>
+    <div class="section">
+      <h2><span class="num">T3</span>Құралға тән параметрлер</h2>
+      <div id="qmjPanel" hidden></div><div id="teacherParams" class="teacherParams"><span class="note">Алдымен құралды таңдаңыз.</span></div>
+    </div>
+    <div class="section">
+      <h2><span class="num">T4</span>Сапа және нәтиже</h2>
+      <div class="checks">
+        <label><input type="checkbox" id="tStructured" checked> Құрылымды нәтиже</label>
+        <label><input type="checkbox" id="tVerify" checked> Логиканы тексеру</label>
+        <label><input type="checkbox" id="tKazakh" checked> Қазақша интерфейс/мәтін</label>
+        <label><input type="checkbox" id="tPrivacy" checked> Құпиялықты сақтау</label>
+      </div>
+      <label>Қосымша талаптар</label><textarea id="tExtra" placeholder="Мысалы: 130-бұйрық форматына сай; бір HTML файл; сыртқы кітапханасыз..."></textarea>
+      <div class="actions" style="margin-top:14px"><button class="btn" id="teacherGenerate" type="button">Промпт құрастыру</button><button class="btn alt" id="teacherClear" type="button">Тазалау</button></div><p id="teacherMessage" class="note" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="panel preview">
+    <div class="bar"><span><span class="windowdots"><i></i><i></i><i></i></span>teacher-prompt.md</span><div class="actions"><button class="btn alt" id="teacherCopy" type="button">Көшіру</button><button class="btn alt" id="teacherSave" type="button">.md сақтау</button></div></div>
+    <pre id="teacherPreview">FOR TEACHER режимі дайын. Құралды таңдаңыз.</pre>
+  </div>
+</main>
+<footer>Барлық мәлімет браузеріңізде ғана сақталады. Генератор ЖИ сервисіне қосылмайды: ол енгізген мәліметтеріңізден құрылымды промпт құрастырады. Құрал атаулары — осы жоба үшін дербес жасалған, кеңейтілетін каталог.</footer></div><section id="cardStudio" class="modeHidden" style="display:block"><iframe id="visualFrame" title="Көрнекі материалдар промпт генераторы" style="width:100%;border:0;min-height:1600px;border-radius:22px" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;kk&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;Промпт Генераторы - Жұмыс парақтары&lt;/title&gt;
+    &lt;style&gt;
+        :root {
+            --primary-color: #4F46E5;
+            --primary-hover: #4338CA;
+            --bg-color: #F3F4F6;
+            --card-bg: #FFFFFF;
+            --text-color: #1F2937;
+            --border-color: #D1D5DB;
+        }
+
+        body {
+            font-family: &#x27;Segoe UI&#x27;, Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+
+        input[type=&quot;text&quot;], select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+
+        input[type=&quot;text&quot;]:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .field-help {
+            margin: 0.5rem 0 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #4B5563;
+        }
+
+        .custom-style-field {
+            margin-top: 0.75rem;
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 1rem; }
+            .container { padding: 1.25rem; min-width: 0; }
+            .grid-2 { grid-template-columns: 1fr; }
+            h1 { font-size: 1.5rem; }
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .result-section {
+            margin-top: 2rem;
+            border-top: 2px dashed var(--border-color);
+            padding-top: 1.5rem;
+        }
+
+        textarea {
+            width: 100%;
+            height: 250px;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: &#x27;Courier New&#x27;, Courier, monospace;
+            background-color: #F9FAFB;
+            resize: vertical;
+            box-sizing: border-box;
+            line-height: 1.5;
+        }
+
+        .copy-btn {
+            background-color: #10B981;
+            margin-top: 0.5rem;
+        }
+
+        .copy-btn:hover {
+            background-color: #059669;
+        }
+
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 17px;
+        }
+
+        .toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+        }
+
+        @keyframes fadeout {
+            from {bottom: 30px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+        }
+    
+*{box-sizing:border-box}body{padding:18px;background:#f3f6f5;display:block}.container{max-width:1000px;margin:auto;border-radius:24px;padding:32px;box-shadow:0 16px 45px #123f3212}h1{color:#143f38;text-align:left;margin:7px 0 10px;font-size:32px}.eyebrow{font-size:11px;color:#337c71;letter-spacing:2px;font-weight:800}.intro{color:#61746f;line-height:1.6;margin-bottom:28px}label{color:#264c43}button{background:#205c50}button:hover{background:#17483e}.copy-btn{background:#205c50}.secondary{background:#647d75}.optionBox{background:#f0f5f2;border:1px solid #dae6df;padding:18px;border-radius:14px;margin:20px 0}.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}input,select,textarea{font:inherit;width:100%}textarea#material{min-height:130px}#outputPrompt{min-height:300px;line-height:1.7}#gridPreview{display:grid;gap:5px;max-width:400px;margin:15px auto}.miniCell{padding:9px 4px;text-align:center;border:1px solid #adc8bb;background:white;border-radius:5px;font-size:11px;color:#24584c}[hidden]{display:none!important}#status{color:#9b352b;line-height:1.5}.result-section{background:#f5f8f6;border-radius:16px;padding:20px;margin-top:22px}@media(max-width:600px){body{padding:5px}.container{padding:16px}h1{font-size:25px}.grid-2{grid-template-columns:1fr}}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;div class=&quot;container&quot;&gt;
+    &lt;div class=&quot;eyebrow&quot;&gt;СІЗДІҢ ҮЛГІЛЕРІҢІЗ НЕГІЗІНДЕ&lt;/div&gt;&lt;h1&gt;Көрнекі материалдар&lt;/h1&gt;&lt;p class=&quot;intro&quot;&gt;Түрін таңдаңыз. Мазмұнын енгізіңіз. Дайын сурет жасауға арналған промптты көшіріңіз.&lt;/p&gt;
+    
+    &lt;div class=&quot;form-group&quot;&gt;
+        &lt;label for=&quot;topic&quot;&gt;Тақырып:&lt;/label&gt;
+        &lt;input type=&quot;text&quot; id=&quot;topic&quot; placeholder=&quot;Мысалы: Қазақ хандығының құрылуы немесе Экология мәселелері&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;grid-2&quot;&gt;
+        &lt;div class=&quot;form-group&quot;&gt;
+            &lt;label for=&quot;grade&quot;&gt;Сынып / Жас ерекшелігі:&lt;/label&gt;
+            &lt;input type=&quot;text&quot; id=&quot;grade&quot; placeholder=&quot;Мысалы: 8-сынып&quot;&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;form-group&quot;&gt;
+            &lt;label for=&quot;type&quot;&gt;Материал түрі:&lt;/label&gt;
+            &lt;select id=&quot;type&quot;&gt;&lt;option value=&quot;worksheet&quot;&gt;Жұмыс парағы&lt;/option&gt;&lt;option value=&quot;cards&quot;&gt;Карточкалар постері / жинағы&lt;/option&gt;&lt;option value=&quot;info&quot;&gt;Ақпараттық постер / инфографика&lt;/option&gt;&lt;option value=&quot;levels&quot;&gt;А–В–С деңгейлік парақ&lt;/option&gt;&lt;option value=&quot;practice&quot;&gt;Жаттығу карточкасы&lt;/option&gt;&lt;option value=&quot;algorithm&quot;&gt;Алгоритмдік карточка&lt;/option&gt;&lt;option value=&quot;notes&quot;&gt;Ақпараттық конспект&lt;/option&gt;&lt;option value=&quot;timeline&quot;&gt;Хронологиялық таспа&lt;/option&gt;&lt;option value=&quot;compare&quot;&gt;Салыстыру парағы&lt;/option&gt;&lt;option value=&quot;mindmap&quot;&gt;Ой картасы / кластер&lt;/option&gt;&lt;option value=&quot;source&quot;&gt;Дерекпен жұмыс парағы&lt;/option&gt;&lt;option value=&quot;reflection&quot;&gt;Рефлексия парағы&lt;/option&gt;&lt;option value=&quot;tic&quot;&gt;Таңдау тақтасы — Tic-Tac-Toe&lt;/option&gt;&lt;/select&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;grid-2&quot;&gt;
+        &lt;div class=&quot;form-group&quot;&gt;
+            &lt;label for=&quot;format&quot;&gt;Парақ форматы:&lt;/label&gt;
+            &lt;select id=&quot;format&quot;&gt;
+                &lt;option value=&quot;А4 тік (Портрет)&quot;&gt;А4 тік (Портрет)&lt;/option&gt;
+                &lt;option value=&quot;А3 тік&quot;&gt;А3 тік&lt;/option&gt;&lt;option value=&quot;А3 көлденең&quot;&gt;А3 көлденең&lt;/option&gt;&lt;option value=&quot;А2 тік&quot;&gt;А2 тік&lt;/option&gt;&lt;option value=&quot;А4 көлденең (Альбом)&quot;&gt;А4 көлденең (Альбом)&lt;/option&gt;
+                &lt;option value=&quot;9:16 тік (Мобильді / Инфографика)&quot;&gt;9:16 тік (Мобильді/Инфографика)&lt;/option&gt;
+                &lt;option value=&quot;1:1 Шаршы (Интерактивті тақта үшін)&quot;&gt;1:1 Шаршы (Интерактивті тақта)&lt;/option&gt;
+            &lt;/select&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;form-group&quot;&gt;
+            &lt;label for=&quot;style&quot;&gt;Визуалды стиль:&lt;/label&gt;
+            &lt;select id=&quot;style&quot; aria-describedby=&quot;styleDescription&quot; onchange=&quot;updateStyleDescription()&quot;&gt;
+                &lt;option value=&quot;Флэт-вектор, таза UI, жарқын түстер (Балаларға арналған)&quot;&gt;Флэт-вектор (Жарқын/Балаларға)&lt;/option&gt;
+                &lt;option value=&quot;Академиялық стиль: ақ фон, қою жасыл тақырыптар, ұстамды үйлесімді жиектер, анық қаріп, жинақы нөмірленген блоктар, тақырыпқа сай шынайы иллюстрациялар&quot;&gt;Академиялық стиль&lt;/option&gt;
+                &lt;option value=&quot;Pixar стиліндегі 3D: көлемді, тартымды кейіпкерлер, жұмсақ жарық, жарқын әрі үйлесімді түстер, тақырыпқа сай үшөлшемді иллюстрациялар; мәтін мен жауап орындары анық оқылатын жазық блоктарда&quot;&gt;Pixar 3D&lt;/option&gt;
+                &lt;option value=&quot;Шынайы 3D: табиғи пропорциялар, шынайы материалдар мен жарық, тақырыпқа сай көлемді нысандар, ұстамды түстер және анық оқылатын мәтін блоктары&quot;&gt;Шынайы 3D&lt;/option&gt;
+                &lt;option value=&quot;Минимализм, сызықтық иконкалар, академиялық қатаңдық&quot;&gt;Минимализм (Академиялық)&lt;/option&gt;
+                &lt;option value=&quot;Винтаж / Тарихи стиль, сарғайған қағаз текстурасы&quot;&gt;Винтаж / Тарихи стиль&lt;/option&gt;
+                &lt;option value=&quot;Скетч: қолмен салынғандай сызықтық суреттер, қарындаш әсері, жеңіл түсті екпіндер, таза әрі анық мәтін&quot;&gt;Скетч (Қолмен салынған)&lt;/option&gt;
+                &lt;option value=&quot;Скетчноутинг: қысқа мәтіндер, қолмен салынғандай шағын суреттер, ой көпіршіктері, жебелер және мағыналық байланыстар; тапсырмалар мен нұсқаулар толық сақталады&quot;&gt;Скетчноутинг&lt;/option&gt;
+                &lt;option value=&quot;Инфографика: реттелген ақпарат блоктары, біркелкі иконкалар, түс арқылы топтастыру, мазмұнға сай сызбалар мен кестелер, анық оқылатын мәтін&quot;&gt;Инфографика&lt;/option&gt;
+                &lt;option value=&quot;Акварель: жұмсақ бояулар, нәзік тақырыптық иллюстрациялар, ақ фон, мәтінге арналған таза аймақтар&quot;&gt;Акварель&lt;/option&gt;
+                &lt;option value=&quot;Комикс: тапсырмаларды жеке көріністерге орналастыру, кейіпкерлер мен сөйлеу көпіршіктері, анық контурлар, үйлесімді түстер; сұрақтар мен жауап орындары толық сақталады&quot;&gt;Комикс&lt;/option&gt;
+                &lt;option value=&quot;Ақ-қара баспа стилі: ақ фон, қара мәтін, сызықтық иллюстрациялар, айқын кестелер мен жиектер, бояуды үнемдейтін безендіру&quot;&gt;Ақ-қара (Басып шығаруға)&lt;/option&gt;
+                &lt;option value=&quot;Дәптер / блокнот стилі: спиральді түптеу, бүйірлік бетбелгілер, нөмірленген жинақы блоктар, ақ қағаз, тақырыптық шағын суреттер және анық мәтін&quot;&gt;Дәптер / блокнот&lt;/option&gt;&lt;option value=&quot;Газет стилі: айқын айдарлар, реттелген бағандар, қағаз фактурасы, тақырыптық суреттер және оқуға ыңғайлы қысқа мәтіндер&quot;&gt;Газет / баспасөз&lt;/option&gt;&lt;option value=&quot;Музей экспозициясы стилі: ашық бейтарап фон, нысандардың шынайы иллюстрациялары, қысқа түсіндірме тақтайшалар және жинақы бөлімдер&quot;&gt;Музей экспозициясы&lt;/option&gt;&lt;option value=&quot;Қағаз коллаж стилі: қиылған қағаз қабаттары, тақырыптық суреттер, жұмсақ көлеңке және мәтінге арналған таза аймақтар&quot;&gt;Қағаз коллаж&lt;/option&gt;&lt;option value=&quot;Тақта және бор стилі: қою жасыл фон, ақ және түрлі-түсті бор әсеріндегі сызбалар, ірі анық жазу&quot;&gt;Тақта және бор&lt;/option&gt;&lt;option value=&quot;Ұлттық нақыш: шеттерінде ұстамды қазақ оюлары, үйлесімді түстер, тақырыптық иллюстрациялар; негізгі мәтін ақ немесе ашық таза аймақта&quot;&gt;Ұлттық нақыш&lt;/option&gt;&lt;option value=&quot;custom&quot;&gt;Өз стилімді жазу&lt;/option&gt;
+            &lt;/select&gt;
+            &lt;p id=&quot;styleDescription&quot; class=&quot;field-help&quot; aria-live=&quot;polite&quot;&gt;&lt;/p&gt;
+            &lt;div id=&quot;customStyleField&quot; class=&quot;custom-style-field&quot; hidden&gt;
+                &lt;label for=&quot;customStyle&quot;&gt;Стиль сипаттамасы:&lt;/label&gt;
+                &lt;input type=&quot;text&quot; id=&quot;customStyle&quot; disabled placeholder=&quot;Мысалы: ақ фон, қою жасыл жиектер, шынайы тарихи суреттер&quot;&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+&lt;div id=&quot;cardOptions&quot; hidden class=&quot;optionBox&quot;&gt;&lt;h3&gt;Карточкалар құрамы&lt;/h3&gt;&lt;div class=&quot;grid-2&quot;&gt;&lt;div&gt;&lt;label for=&quot;total&quot;&gt;Жалпы саны&lt;/label&gt;&lt;input id=&quot;total&quot; type=&quot;number&quot; min=&quot;1&quot; max=&quot;60&quot; value=&quot;12&quot;&gt;&lt;/div&gt;&lt;div&gt;&lt;label for=&quot;grid&quot;&gt;Тор&lt;/label&gt;&lt;select id=&quot;grid&quot;&gt;&lt;option value=&quot;auto&quot;&gt;Автоматты&lt;/option&gt;&lt;option&gt;3×2&lt;/option&gt;&lt;option&gt;5×2&lt;/option&gt;&lt;option&gt;4×3&lt;/option&gt;&lt;option&gt;3×3&lt;/option&gt;&lt;option&gt;4×4&lt;/option&gt;&lt;option&gt;5×3&lt;/option&gt;&lt;option value=&quot;custom&quot;&gt;Өз өлшемім&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;customGridBox&quot; hidden&gt;&lt;label for=&quot;customGrid&quot;&gt;Баған × жол&lt;/label&gt;&lt;input id=&quot;customGrid&quot; placeholder=&quot;Мысалы: 4×4&quot;&gt;&lt;/div&gt;&lt;div class=&quot;grid-2&quot;&gt;&lt;div&gt;&lt;label for=&quot;cover&quot;&gt;Мұқаба саны&lt;/label&gt;&lt;input id=&quot;cover&quot; type=&quot;number&quot; min=&quot;0&quot; value=&quot;0&quot;&gt;&lt;/div&gt;&lt;div&gt;&lt;label for=&quot;guide&quot;&gt;Нұсқаулық саны&lt;/label&gt;&lt;input id=&quot;guide&quot; type=&quot;number&quot; min=&quot;0&quot; value=&quot;0&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;label for=&quot;register&quot;&gt;Тіркеу парағы саны&lt;/label&gt;&lt;input id=&quot;register&quot; type=&quot;number&quot; min=&quot;0&quot; value=&quot;1&quot;&gt;&lt;p id=&quot;composition&quot; class=&quot;field-help&quot;&gt;&lt;/p&gt;&lt;div id=&quot;gridPreview&quot; aria-label=&quot;Тордың орналасу үлгісі&quot;&gt;&lt;/div&gt;&lt;p class=&quot;field-help&quot;&gt;Тек орналасу сызбасы. Дайын суретті ЖИ жасайды.&lt;/p&gt;&lt;/div&gt;
+&lt;div id=&quot;amountOptions&quot; class=&quot;optionBox&quot;&gt;&lt;label id=&quot;amountLabel&quot; for=&quot;amount&quot;&gt;Тапсырма саны&lt;/label&gt;&lt;input id=&quot;amount&quot; type=&quot;number&quot; min=&quot;1&quot; max=&quot;30&quot; value=&quot;4&quot;&gt;&lt;/div&gt;
+&lt;div id=&quot;levelOptions&quot; hidden class=&quot;optionBox&quot;&gt;&lt;h3&gt;Деңгейлердегі тапсырмалар саны&lt;/h3&gt;&lt;div class=&quot;grid-3&quot;&gt;&lt;div&gt;&lt;label for=&quot;levelA&quot;&gt;А&lt;/label&gt;&lt;input id=&quot;levelA&quot; type=&quot;number&quot; min=&quot;1&quot; max=&quot;15&quot; value=&quot;3&quot;&gt;&lt;/div&gt;&lt;div&gt;&lt;label for=&quot;levelB&quot;&gt;В&lt;/label&gt;&lt;input id=&quot;levelB&quot; type=&quot;number&quot; min=&quot;1&quot; max=&quot;15&quot; value=&quot;3&quot;&gt;&lt;/div&gt;&lt;div&gt;&lt;label for=&quot;levelC&quot;&gt;С&lt;/label&gt;&lt;input id=&quot;levelC&quot; type=&quot;number&quot; min=&quot;1&quot; max=&quot;15&quot; value=&quot;2&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p id=&quot;ticHelp&quot; hidden class=&quot;optionBox&quot;&gt;3×3 тор, 9 тапсырма. Оқушы көлденең, тігінен немесе диагональ бойынша үш тапсырманы таңдайды.&lt;/p&gt;
+&lt;label for=&quot;material&quot;&gt;Дайын тапсырмалар немесе бастапқы мәтін&lt;/label&gt;&lt;textarea id=&quot;material&quot; placeholder=&quot;Өз тапсырмаларыңызды немесе тақырыптық мәтінді қойыңыз&quot;&gt;&lt;/textarea&gt;
+&lt;label for=&quot;imageType&quot;&gt;Иллюстрация түрі&lt;/label&gt;&lt;select id=&quot;imageType&quot;&gt;&lt;option&gt;Таңдалған стильге сай&lt;/option&gt;&lt;option&gt;3D иллюстрациялар&lt;/option&gt;&lt;option&gt;Шынайы тарихи иллюстрациялар&lt;/option&gt;&lt;option&gt;Қолмен салынған суреттер&lt;/option&gt;&lt;option&gt;Акварель иллюстрациялар&lt;/option&gt;&lt;option&gt;Сызбалар мен белгішелер&lt;/option&gt;&lt;/select&gt;
+&lt;button onclick=&quot;generatePrompt()&quot;&gt;Промпт құрастыру 🚀&lt;/button&gt;
+
+    &lt;div class=&quot;result-section&quot;&gt;
+        &lt;label for=&quot;outputPrompt&quot;&gt;Дайын Промпт:&lt;/label&gt;
+        &lt;textarea id=&quot;outputPrompt&quot; readonly placeholder=&quot;Осы жерде сіздің дайын промптыңыз пайда болады...&quot;&gt;&lt;/textarea&gt;
+        &lt;div class=&quot;grid-2&quot;&gt;&lt;button class=&quot;copy-btn&quot; onclick=&quot;copyPrompt()&quot;&gt;Көшіріп алу&lt;/button&gt;&lt;button class=&quot;copy-btn secondary&quot; onclick=&quot;downloadPrompt()&quot;&gt;Мәтінді жүктеу&lt;/button&gt;&lt;/div&gt;&lt;p id=&quot;status&quot; role=&quot;status&quot;&gt;&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id=&quot;toast&quot; class=&quot;toast&quot;&gt;Промпт сәтті көшірілді!&lt;/div&gt;
+
+&lt;script&gt;
+const $=id=&gt;document.getElementById(id),v=id=&gt;$(id).value.trim();
+function updateStyleDescription(){const custom=v(&#x27;style&#x27;)===&#x27;custom&#x27;;$(&#x27;customStyleField&#x27;).hidden=!custom;$(&#x27;customStyle&#x27;).disabled=!custom;$(&#x27;styleDescription&#x27;).textContent=custom?&#x27;Өз стиліңізді жазыңыз.&#x27;:v(&#x27;style&#x27;)}
+function gridData(){const n=Number(v(&#x27;total&#x27;));let text=v(&#x27;grid&#x27;);if(text===&#x27;auto&#x27;){let c=Math.ceil(Math.sqrt(n));while(c&gt;1&amp;&amp;n%c!==0)c--;if(n===6)c=3;if(n===10)c=5;if(n===12)c=4;if(n===15)c=5;text=c+&#x27;×&#x27;+n/c}else if(text===&#x27;custom&#x27;)text=v(&#x27;customGrid&#x27;);const m=text.match(/^(\d+)\s*[×xх*]\s*(\d+)$/i);return {n,text,c:m?+m[1]:0,r:m?+m[2]:0}}
+function sync(){const t=v(&#x27;type&#x27;);$(&#x27;cardOptions&#x27;).hidden=t!==&#x27;cards&#x27;;$(&#x27;amountOptions&#x27;).hidden=[&#x27;cards&#x27;,&#x27;levels&#x27;,&#x27;tic&#x27;].includes(t);$(&#x27;levelOptions&#x27;).hidden=t!==&#x27;levels&#x27;;$(&#x27;ticHelp&#x27;).hidden=t!==&#x27;tic&#x27;;$(&#x27;customGridBox&#x27;).hidden=v(&#x27;grid&#x27;)!==&#x27;custom&#x27;;$(&#x27;amountLabel&#x27;).textContent=[&#x27;info&#x27;,&#x27;notes&#x27;,&#x27;mindmap&#x27;].includes(t)?&#x27;Ақпарат блоктарының саны&#x27;:t===&#x27;timeline&#x27;?&#x27;Оқиға саны&#x27;:t===&#x27;compare&#x27;?&#x27;Салыстыру өлшемдерінің саны&#x27;:t===&#x27;algorithm&#x27;?&#x27;Қадам саны&#x27;:&#x27;Тапсырма саны&#x27;;updateStyleDescription();const g=gridData(),extras=[&#x27;cover&#x27;,&#x27;guide&#x27;,&#x27;register&#x27;].reduce((a,id)=&gt;a+Number(v(id)),0),tasks=g.n-extras;$(&#x27;composition&#x27;).textContent=`${tasks} тапсырма + ${v(&#x27;cover&#x27;)} мұқаба + ${v(&#x27;guide&#x27;)} нұсқаулық + ${v(&#x27;register&#x27;)} тіркеу парағы = ${g.n} карточка.`;const box=$(&#x27;gridPreview&#x27;);box.replaceChildren();if(Number.isInteger(g.n)&amp;&amp;g.n&gt;0&amp;&amp;g.n&lt;=60&amp;&amp;g.c&gt;0&amp;&amp;g.c&lt;=12&amp;&amp;g.r&gt;0&amp;&amp;g.r&lt;=12){box.style.gridTemplateColumns=`repeat(${g.c},1fr)`;for(let i=0;i&lt;g.n;i++){const el=document.createElement(&#x27;div&#x27;);el.className=&#x27;miniCell&#x27;;el.textContent=i&lt;tasks?String(i+1):&#x27;Қосымша&#x27;;box.append(el)}}}
+function generatePrompt(){sync();$(&#x27;status&#x27;).textContent=&#x27;&#x27;;const t=v(&#x27;type&#x27;),style=v(&#x27;style&#x27;)===&#x27;custom&#x27;?v(&#x27;customStyle&#x27;):v(&#x27;style&#x27;);if(!v(&#x27;topic&#x27;)||!v(&#x27;grade&#x27;)||!style){$(&#x27;status&#x27;).textContent=&#x27;Тақырып, сынып және стильді толтырыңыз.&#x27;;$(&#x27;outputPrompt&#x27;).value=&#x27;&#x27;;return false}let instruction=&#x27;&#x27;;const title=&#x27;«&#x27;+v(&#x27;topic&#x27;)+&#x27;» тақырыбы бойынша &#x27;+v(&#x27;grade&#x27;)+&#x27; оқушыларына арналған &#x27;;
+if(t===&#x27;cards&#x27;){const g=gridData(),ids=[&#x27;total&#x27;,&#x27;cover&#x27;,&#x27;guide&#x27;,&#x27;register&#x27;];if(ids.some(id=&gt;!/^\d+$/.test(v(id)))||g.n&lt;1||g.n&gt;60||g.c&lt;1||g.c&gt;12||g.r&lt;1||g.r&gt;12||g.c*g.r!==g.n){$(&#x27;status&#x27;).textContent=&#x27;Карточка саны 1–60 болсын. Тор орындарының саны карточка санына тең болуы керек.&#x27;;$(&#x27;outputPrompt&#x27;).value=&#x27;&#x27;;return false}const cover=+v(&#x27;cover&#x27;),guide=+v(&#x27;guide&#x27;),register=+v(&#x27;register&#x27;),tasks=g.n-cover-guide-register;if(tasks&lt;1){$(&#x27;status&#x27;).textContent=&#x27;Құрамда кемінде бір тапсырма карточкасы қалсын.&#x27;;$(&#x27;outputPrompt&#x27;).value=&#x27;&#x27;;return false}const parts=[tasks+&#x27; тапсырма карточкасы&#x27;,cover?cover+&#x27; мұқаба&#x27;:&#x27;&#x27;,guide?guide+&#x27; қолдану нұсқаулығы&#x27;:&#x27;&#x27;,register?register+&#x27; оқушының тіркеу парағы&#x27;:&#x27;&#x27;].filter(Boolean);instruction=title+g.n+&#x27; карточкалық білім беру постерінің суретін жаса. Тор: &#x27;+g.text+&#x27;. Құрамы: &#x27;+parts.join(&#x27;, &#x27;)+&#x27;. Әр тапсырма карточкасында нөмір, тапсырма, тақырыптық иллюстрация, 1 сұрақ және оқушы жауабын жазатын орын болсын.&#x27;}
+else if(t===&#x27;tic&#x27;)instruction=title+&#x27;Tic-Tac-Toe таңдау тақтасының суретін жаса. Формат: 3×3 тор, 9 түрлі тапсырма. Нұсқаулық: көлденең, тігінен немесе диагональ бойынша бір қатардағы үш тапсырманы таңдап орында. Әр ұяшықта нөмір, қысқа тапсырма, тақырыптық иллюстрация және орындалғанын белгілеуге орын болсын.&#x27;;
+else if(t===&#x27;levels&#x27;){if([&#x27;levelA&#x27;,&#x27;levelB&#x27;,&#x27;levelC&#x27;].some(id=&gt;!/^\d+$/.test(v(id))||+v(id)&lt;1||+v(id)&gt;15)){$(&#x27;status&#x27;).textContent=&#x27;Әр деңгейге 1–15 тапсырма енгізіңіз.&#x27;;$(&#x27;outputPrompt&#x27;).value=&#x27;&#x27;;return false}instruction=title+&#x27;деңгейлік жұмыс парағының суретін жаса. А — базалық: &#x27;+v(&#x27;levelA&#x27;)+&#x27; тапсырма; В — орташа: &#x27;+v(&#x27;levelB&#x27;)+&#x27; тапсырма; С — күрделі: &#x27;+v(&#x27;levelC&#x27;)+&#x27; тапсырма. Әр деңгей жеке блокта, тапсырмаларға сай иллюстрациялар және жауап орындары болсын.&#x27;}
+else {if(!/^\d+$/.test(v(&#x27;amount&#x27;))||+v(&#x27;amount&#x27;)&lt;1||+v(&#x27;amount&#x27;)&gt;30){$(&#x27;status&#x27;).textContent=&#x27;1–30 аралығындағы санды енгізіңіз.&#x27;;$(&#x27;outputPrompt&#x27;).value=&#x27;&#x27;;return false}const count=v(&#x27;amount&#x27;);const phrases={notes:&#x27;ақпараттық конспектінің суретін жаса. &#x27;+count+&#x27; нөмірленген мағыналық бөлім болсын. Әр бөлімде қысқа негізгі деректер, тақырыптық иллюстрация немесе шағын сызба көрсет.&#x27;,timeline:&#x27;хронологиялық таспаның суретін жаса. &#x27;+count+&#x27; оқиғаны уақыт ретімен орналастыр. Әр оқиғаға дата, қысқа түсіндірме және тақырыптық иллюстрация бер. Даталарды берілген мәтіннен ал.&#x27;,compare:&#x27;салыстыру парағының суретін жаса. Тақырыптағы нысандарды &#x27;+count+&#x27; өлшем бойынша салыстыруға арналған кесте және оқушы толтыратын бос орындар бер.&#x27;,mindmap:&#x27;ой картасының суретін жаса. Ортасында негізгі тақырып, айналасында &#x27;+count+&#x27; мағыналық тармақ болсын. Тармақтарда қысқа ұғымдар, тақырыптық белгішелер мен анық байланыстар көрсет.&#x27;,source:&#x27;дерекпен жұмыс парағының суретін жаса. Берілген мәтінді немесе деректі және оны талдауға арналған &#x27;+count+&#x27; тапсырманы жеке блоктарға орналастыр. Жауап жазатын орын қалдыр. Түпнұсқа дерек берілмесе, оны сұрат; дерек пен авторды ойдан шығарма.&#x27;,reflection:&#x27;рефлексия парағының суретін жаса. Оқушының нені меңгергенін, қиындықтарын және келесі қадамын түсінуіне арналған &#x27;+count+&#x27; қысқа сұрақ не аяқталмаған сөйлем бер. Жауап жазуға немесе белгілеуге бос орын қалдыр.&#x27;,worksheet:&#x27;жұмыс парағының суретін жаса. &#x27;+count+&#x27; тапсырма, тақырыптық иллюстрациялар, оқушының аты-жөні мен жауап жазатын орындар болсын.&#x27;,info:&#x27;ақпараттық постердің суретін жаса. &#x27;+count+&#x27; негізгі ақпарат блогы, әр блокта қысқа түсіндірме мен мағыналы иллюстрация болсын. Реті: тақырып → негізгі ұғымдар → мысалдар.&#x27;,practice:&#x27;жаттығу карточкасының суретін жаса. &#x27;+count+&#x27; практикалық жаттығу, тақырыптық иллюстрация және жауап жазатын орын болсын.&#x27;,algorithm:&#x27;алгоритмдік карточканың суретін жаса. Тапсырманы орындаудың &#x27;+count+&#x27; қадамын ретімен көрсет. Әр қадамға қысқа нұсқаулық пен көрнекілік бер.&#x27;};instruction=title+phrases[t]}
+const material=v(&#x27;material&#x27;)?&#x27;\n\nТапсырмалар / бастапқы мәтін:\n&#x27;+v(&#x27;material&#x27;):&#x27;&#x27;;$(&#x27;outputPrompt&#x27;).value=&#x27;Маған &#x27;+instruction+&#x27; Пішім: &#x27;+v(&#x27;format&#x27;)+&#x27;. Стиль: &#x27;+style+&#x27;. Иллюстрациялар: &#x27;+v(&#x27;imageType&#x27;)+&#x27;. Барлық мәтін қазақ тілінде, грамматикалық және стилистикалық қатесіз болсын. Мәтін анық, жақсы оқылатын, дизайн біркелкі, басып шығаруға ыңғайлы болсын. Оқушы орындайтын тапсырмаларды алдын ала шешіп қойма.&#x27;+material;save();return true}
+const fields=[&#x27;topic&#x27;,&#x27;grade&#x27;,&#x27;type&#x27;,&#x27;format&#x27;,&#x27;style&#x27;,&#x27;customStyle&#x27;,&#x27;total&#x27;,&#x27;grid&#x27;,&#x27;customGrid&#x27;,&#x27;cover&#x27;,&#x27;guide&#x27;,&#x27;register&#x27;,&#x27;amount&#x27;,&#x27;levelA&#x27;,&#x27;levelB&#x27;,&#x27;levelC&#x27;,&#x27;material&#x27;,&#x27;imageType&#x27;];function save(){try{localStorage.setItem(&#x27;visual-materials-simple-v1&#x27;,JSON.stringify(Object.fromEntries(fields.map(id=&gt;[id,v(id)]))))}catch{}}
+fields.forEach(id=&gt;$(id).addEventListener(&#x27;input&#x27;,()=&gt;{sync();save();$(&#x27;outputPrompt&#x27;).value=&#x27;&#x27;;$(&#x27;status&#x27;).textContent=&#x27;Параметрлер өзгерді. «Промпт құрастыру» батырмасын басыңыз.&#x27;}));
+try{const state=JSON.parse(localStorage.getItem(&#x27;visual-materials-simple-v1&#x27;)||&#x27;null&#x27;);if(state)fields.forEach(id=&gt;{if(state[id]!==undefined)$(id).value=state[id]})}catch{}
+async function copyPrompt(){if(!generatePrompt())return;try{await navigator.clipboard.writeText($(&#x27;outputPrompt&#x27;).value);$(&#x27;status&#x27;).textContent=&#x27;Промпт көшірілді.&#x27;}catch{$(&#x27;outputPrompt&#x27;).select();try{$(&#x27;status&#x27;).textContent=document.execCommand(&#x27;copy&#x27;)?&#x27;Промпт көшірілді.&#x27;:&#x27;Мәтінді Ctrl+C арқылы көшіріңіз.&#x27;}catch{$(&#x27;status&#x27;).textContent=&#x27;Мәтінді Ctrl+C арқылы көшіріңіз.&#x27;}}}
+function downloadPrompt(){if(!generatePrompt())return;const url=URL.createObjectURL(new Blob([$ (&#x27;outputPrompt&#x27;).value],{type:&#x27;text/plain;charset=utf-8&#x27;}));const a=document.createElement(&#x27;a&#x27;);a.href=url;a.download=&#x27;visual-prompt.txt&#x27;;a.click();setTimeout(()=&gt;URL.revokeObjectURL(url),1000)}sync();
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></section>
+<script>
+'use strict';const CATALOG=[{"category": "Тест және бағалау", "name": "Интерактивті тест"}, {"category": "Тест және бағалау", "name": "ҰБТ тренажері"}, {"category": "Тест және бағалау", "name": "Викторина"}, {"category": "Тест және бағалау", "name": "Блиц тест"}, {"category": "Тест және бағалау", "name": "Дұрыс немесе бұрыс"}, {"category": "Тест және бағалау", "name": "Бір жауапты тест"}, {"category": "Тест және бағалау", "name": "Көп жауапты тест"}, {"category": "Тест және бағалау", "name": "Сәйкестендіру"}, {"category": "Тест және бағалау", "name": "Бос орынды толтыру"}, {"category": "Тест және бағалау", "name": "Реттілікті анықтау"}, {"category": "Тест және бағалау", "name": "Суретті тест"}, {"category": "Тест және бағалау", "name": "Аудио тест"}, {"category": "Тест және бағалау", "name": "Диагностикалық тест"}, {"category": "Тест және бағалау", "name": "Кіріс тесті"}, {"category": "Тест және бағалау", "name": "Шығыс тесті"}, {"category": "Тест және бағалау", "name": "Қалыптастырушы бағалау"}, {"category": "Тест және бағалау", "name": "Өзін-өзі бағалау"}, {"category": "Тест және бағалау", "name": "Өзара бағалау"}, {"category": "Тест және бағалау", "name": "Рубрика"}, {"category": "Тест және бағалау", "name": "Дескриптор"}, {"category": "Тест және бағалау", "name": "Бағалау парағы"}, {"category": "Тест және бағалау", "name": "Қате жауаптарды талдау"}, {"category": "Тест және бағалау", "name": "Тақырыптық бақылау"}, {"category": "Тест және бағалау", "name": "Қорытынды тест"}, {"category": "Тест және бағалау", "name": "Адаптивті тест"}, {"category": "Тест және бағалау", "name": "Таймерлі тест"}, {"category": "Тест және бағалау", "name": "Сұрақтар банкі"}, {"category": "Тест және бағалау", "name": "Емтихан симуляторы"}, {"category": "Тест және бағалау", "name": "БЖБ конструкторы"}, {"category": "Тест және бағалау", "name": "ТЖБ конструкторы"}, {"category": "Ойын және геймификация", "name": "Escape Room"}, {"category": "Ойын және геймификация", "name": "Тарихи квест"}, {"category": "Ойын және геймификация", "name": "Сөз таптарын сұрыптау"}, {"category": "Ойын және геймификация", "name": "Карточка сұрыптау"}, {"category": "Ойын және геймификация", "name": "Сөзжұмбақ"}, {"category": "Ойын және геймификация", "name": "Филворд"}, {"category": "Ойын және геймификация", "name": "Анаграмма"}, {"category": "Ойын және геймификация", "name": "Сөз іздеу"}, {"category": "Ойын және геймификация", "name": "Жасырын сөз"}, {"category": "Ойын және геймификация", "name": "Кім жылдам"}, {"category": "Ойын және геймификация", "name": "Jeopardy"}, {"category": "Ойын және геймификация", "name": "Бинго"}, {"category": "Ойын және геймификация", "name": "Лото"}, {"category": "Ойын және геймификация", "name": "Домино"}, {"category": "Ойын және геймификация", "name": "Пазл"}, {"category": "Ойын және геймификация", "name": "Мозаика"}, {"category": "Ойын және геймификация", "name": "Жұптарды тап"}, {"category": "Ойын және геймификация", "name": "Есте сақтау ойыны"}, {"category": "Ойын және геймификация", "name": "Дөңгелек рулетка"}, {"category": "Ойын және геймификация", "name": "Сәттілік дөңгелегі"}, {"category": "Ойын және геймификация", "name": "Деңгейлік ойын"}, {"category": "Ойын және геймификация", "name": "Босс шайқасы"}, {"category": "Ойын және геймификация", "name": "Миссия ойыны"}, {"category": "Ойын және геймификация", "name": "Кодты тап"}, {"category": "Ойын және геймификация", "name": "Қазына іздеу"}, {"category": "Ойын және геймификация", "name": "Лабиринт"}, {"category": "Ойын және геймификация", "name": "Ойын картасы"}, {"category": "Ойын және геймификация", "name": "Жарыс симуляторы"}, {"category": "Ойын және геймификация", "name": "Сөз құрастыру"}, {"category": "Ойын және геймификация", "name": "Сөйлем құрастыру"}, {"category": "Ойын және геймификация", "name": "Дұрыс себетке сал"}, {"category": "Ойын және геймификация", "name": "Уақытпен жарыс"}, {"category": "Ойын және геймификация", "name": "Командалық турнир"}, {"category": "Ойын және геймификация", "name": "Сұрақ аукционы"}, {"category": "Ойын және геймификация", "name": "Білім бәйгесі"}, {"category": "Ойын және геймификация", "name": "Шифр шешу"}, {"category": "Ойын және геймификация", "name": "Тарихи детектив"}, {"category": "Ойын және геймификация", "name": "Рөлдік ойын"}, {"category": "Ойын және геймификация", "name": "Математикалық аркада"}, {"category": "Ойын және геймификация", "name": "Қадамдық шытырман"}, {"category": "Тарих және қоғам", "name": "Интерактивті хронология"}, {"category": "Тарих және қоғам", "name": "Тарихи карта"}, {"category": "Тарих және қоғам", "name": "Картадағы нүктелер"}, {"category": "Тарих және қоғам", "name": "Тарихи тұлға паспорты"}, {"category": "Тарих және қоғам", "name": "Тарихи дерек талдағыш"}, {"category": "Тарих және қоғам", "name": "Дерек сенімділігі"}, {"category": "Тарих және қоғам", "name": "Себеп-салдар тізбегі"}, {"category": "Тарих және қоғам", "name": "Тарихи оқиға реконструкциясы"}, {"category": "Тарих және қоғам", "name": "Тарихи симулятор"}, {"category": "Тарих және қоғам", "name": "Баламалы сценарий талдауы"}, {"category": "Тарих және қоғам", "name": "Тарихи дебат"}, {"category": "Тарих және қоғам", "name": "Тарихи сот"}, {"category": "Тарих және қоғам", "name": "Тарихи музей"}, {"category": "Тарих және қоғам", "name": "Виртуалды экскурсия"}, {"category": "Тарих және қоғам", "name": "Археологиялық экспедиция"}, {"category": "Тарих және қоғам", "name": "Мәдениет салыстыру"}, {"category": "Тарих және қоғам", "name": "Өркениет салыстыру"}, {"category": "Тарих және қоғам", "name": "Шежіре ағашы"}, {"category": "Тарих және қоғам", "name": "Тарихи маршрут"}, {"category": "Тарих және қоғам", "name": "Картамен жұмыс"}, {"category": "Тарих және қоғам", "name": "Хронологиялық сәйкестендіру"}, {"category": "Тарих және қоғам", "name": "Дәуірлерді сұрыптау"}, {"category": "Тарих және қоғам", "name": "Тарихи құжат архиві"}, {"category": "Тарих және қоғам", "name": "Тұлғаларды сәйкестендіру"}, {"category": "Тарих және қоғам", "name": "Оқиға күнтізбесі"}, {"category": "Тарих және қоғам", "name": "Тарихи газет"}, {"category": "Тарих және қоғам", "name": "Тарихи сұхбат"}, {"category": "Тарих және қоғам", "name": "Қоғамдық мәселе кейсі"}, {"category": "Тарих және қоғам", "name": "Құқықтық жағдаят"}, {"category": "Тарих және қоғам", "name": "Азаматтық шешім симуляторы"}, {"category": "Визуал және презентация", "name": "Интерактивті презентация"}, {"category": "Визуал және презентация", "name": "Слайд конструкторы"}, {"category": "Визуал және презентация", "name": "Инфографика"}, {"category": "Визуал және презентация", "name": "Интеллект-карта"}, {"category": "Визуал және презентация", "name": "Тұжырымдама картасы"}, {"category": "Визуал және презентация", "name": "Таймлайн"}, {"category": "Визуал және презентация", "name": "Венн диаграммасы"}, {"category": "Визуал және презентация", "name": "Фишбоун"}, {"category": "Визуал және презентация", "name": "Кластер"}, {"category": "Визуал және презентация", "name": "Салыстыру кестесі"}, {"category": "Визуал және презентация", "name": "Процесс диаграммасы"}, {"category": "Визуал және презентация", "name": "Блок-схема"}, {"category": "Визуал және презентация", "name": "Себеп-салдар диаграммасы"}, {"category": "Визуал және презентация", "name": "Скетчноутинг"}, {"category": "Визуал және презентация", "name": "Комикс"}, {"category": "Визуал және презентация", "name": "Сториборд"}, {"category": "Визуал және презентация", "name": "Постер"}, {"category": "Визуал және презентация", "name": "Плакат"}, {"category": "Визуал және презентация", "name": "Ақпараттық карточка"}, {"category": "Визуал және презентация", "name": "Интерактивті сурет"}, {"category": "Визуал және презентация", "name": "Белгіленген сурет"}, {"category": "Визуал және презентация", "name": "Галерея"}, {"category": "Визуал және презентация", "name": "Фотоәңгіме"}, {"category": "Визуал және презентация", "name": "Визуалды сөздік"}, {"category": "Визуал және презентация", "name": "Иллюстрациялық түсіндірме"}, {"category": "Визуал және презентация", "name": "Анимациялық сценарий"}, {"category": "Визуал және презентация", "name": "Бейнесабақ сценарийі"}, {"category": "Визуал және презентация", "name": "Слайд викторинасы"}, {"category": "Визуал және презентация", "name": "Бір слайдтық тапсырма"}, {"category": "Визуал және презентация", "name": "Визуалды конспект"}, {"category": "Саралау және әдістеме", "name": "Choice Board"}, {"category": "Саралау және әдістеме", "name": "Tic-Tac-Toe"}, {"category": "Саралау және әдістеме", "name": "Деңгейлік тапсырма"}, {"category": "Саралау және әдістеме", "name": "А деңгейі"}, {"category": "Саралау және әдістеме", "name": "В деңгейі"}, {"category": "Саралау және әдістеме", "name": "С деңгейі"}, {"category": "Саралау және әдістеме", "name": "Блум таксономиясы"}, {"category": "Саралау және әдістеме", "name": "Оқу станциялары"}, {"category": "Саралау және әдістеме", "name": "Ротация моделі"}, {"category": "Саралау және әдістеме", "name": "Жеке оқу маршруты"}, {"category": "Саралау және әдістеме", "name": "Адаптивті жаттығу"}, {"category": "Саралау және әдістеме", "name": "Қолдау карточкасы"}, {"category": "Саралау және әдістеме", "name": "Күрделендіру карточкасы"}, {"category": "Саралау және әдістеме", "name": "Қадамдық нұсқаулық"}, {"category": "Саралау және әдістеме", "name": "Жұптық жұмыс"}, {"category": "Саралау және әдістеме", "name": "Топтық жұмыс"}, {"category": "Саралау және әдістеме", "name": "Jigsaw"}, {"category": "Саралау және әдістеме", "name": "Think-Pair-Share"}, {"category": "Саралау және әдістеме", "name": "RAFT"}, {"category": "Саралау және әдістеме", "name": "Frayer моделі"}, {"category": "Саралау және әдістеме", "name": "KWL кестесі"}, {"category": "Саралау және әдістеме", "name": "INSERT"}, {"category": "Саралау және әдістеме", "name": "ПОПС формуласы"}, {"category": "Саралау және әдістеме", "name": "ДЖИГСО"}, {"category": "Саралау және әдістеме", "name": "Кейс әдісі"}, {"category": "Саралау және әдістеме", "name": "Проблемалық оқыту"}, {"category": "Саралау және әдістеме", "name": "Жобалық оқыту"}, {"category": "Саралау және әдістеме", "name": "Зерттеушілік оқыту"}, {"category": "Саралау және әдістеме", "name": "Төңкерілген сынып"}, {"category": "Саралау және әдістеме", "name": "Рефлексия парағы"}, {"category": "Жұмыс парақтары", "name": "A4 жұмыс парағы"}, {"category": "Жұмыс парақтары", "name": "Интерактивті жұмыс парағы"}, {"category": "Жұмыс парақтары", "name": "Басып шығарылатын парақ"}, {"category": "Жұмыс парақтары", "name": "Тірек конспект"}, {"category": "Жұмыс парақтары", "name": "Бос кесте"}, {"category": "Жұмыс парақтары", "name": "Толықтыру тапсырмасы"}, {"category": "Жұмыс парақтары", "name": "Талдау парағы"}, {"category": "Жұмыс парақтары", "name": "Салыстыру парағы"}, {"category": "Жұмыс парақтары", "name": "Зертханалық парақ"}, {"category": "Жұмыс парақтары", "name": "Карта парағы"}, {"category": "Жұмыс парақтары", "name": "Дерекпен жұмыс парағы"}, {"category": "Жұмыс парақтары", "name": "Мәтінмен жұмыс парағы"}, {"category": "Жұмыс парақтары", "name": "Оқылым парағы"}, {"category": "Жұмыс парақтары", "name": "Жазылым парағы"}, {"category": "Жұмыс парақтары", "name": "Тыңдалым парағы"}, {"category": "Жұмыс парақтары", "name": "Айтылым парағы"}, {"category": "Жұмыс парақтары", "name": "Есеп шығару парағы"}, {"category": "Жұмыс парақтары", "name": "Формула парағы"}, {"category": "Жұмыс парақтары", "name": "Сөздік парағы"}, {"category": "Жұмыс парақтары", "name": "Терминдер парағы"}, {"category": "Жұмыс парақтары", "name": "Қайталау парағы"}, {"category": "Жұмыс парақтары", "name": "Үй тапсырмасы парағы"}, {"category": "Жұмыс парақтары", "name": "Шығу билеті"}, {"category": "Жұмыс парақтары", "name": "Кіріс билеті"}, {"category": "Жұмыс парақтары", "name": "Жеке тапсырма карточкасы"}, {"category": "Жұмыс парақтары", "name": "Топтық тапсырма карточкасы"}, {"category": "Жұмыс парақтары", "name": "Сараланған парақ"}, {"category": "Жұмыс парақтары", "name": "Жауап парағы"}, {"category": "Жаратылыстану және STEM", "name": "Виртуалды зертхана"}, {"category": "Жаратылыстану және STEM", "name": "Физика симуляторы"}, {"category": "Жаратылыстану және STEM", "name": "Химия симуляторы"}, {"category": "Жаратылыстану және STEM", "name": "Биология симуляторы"}, {"category": "Жаратылыстану және STEM", "name": "География симуляторы"}, {"category": "Жаратылыстану және STEM", "name": "Математика тренажері"}, {"category": "Жаратылыстану және STEM", "name": "График салғыш"}, {"category": "Жаратылыстану және STEM", "name": "Функция зерттеуші"}, {"category": "Жаратылыстану және STEM", "name": "Формула тренажері"}, {"category": "Жаратылыстану және STEM", "name": "Теңдеу шешу"}, {"category": "Жаратылыстану және STEM", "name": "Геометриялық конструктор"}, {"category": "Жаратылыстану және STEM", "name": "Өлшем бірлік тренажері"}, {"category": "Жаратылыстану және STEM", "name": "Эксперимент жоспарлағыш"}, {"category": "Жаратылыстану және STEM", "name": "Ғылыми бақылау күнделігі"}, {"category": "Жаратылыстану және STEM", "name": "Деректер кестесі"}, {"category": "Жаратылыстану және STEM", "name": "Диаграмма талдағыш"}, {"category": "Жаратылыстану және STEM", "name": "Экожүйе моделі"}, {"category": "Жаратылыстану және STEM", "name": "Ауа райы моделі"}, {"category": "Жаратылыстану және STEM", "name": "Қозғалыс моделі"}, {"category": "Жаратылыстану және STEM", "name": "Электр тізбегі"}, {"category": "Жаратылыстану және STEM", "name": "Молекула моделі"}, {"category": "Жаратылыстану және STEM", "name": "Генетикалық есеп"}, {"category": "Жаратылыстану және STEM", "name": "Алгоритм тренажері"}, {"category": "Жаратылыстану және STEM", "name": "Кодтау ойыны"}, {"category": "Жаратылыстану және STEM", "name": "Робот маршруты"}, {"category": "Жаратылыстану және STEM", "name": "Статистика симуляторы"}, {"category": "Жаратылыстану және STEM", "name": "Ықтималдық симуляторы"}, {"category": "Жаратылыстану және STEM", "name": "Қаржы сауаттылығы ойыны"}, {"category": "Тіл және әдебиет", "name": "Сөздік тренажері"}, {"category": "Тіл және әдебиет", "name": "Орфография тренажері"}, {"category": "Тіл және әдебиет", "name": "Пунктуация тренажері"}, {"category": "Тіл және әдебиет", "name": "Морфология тренажері"}, {"category": "Тіл және әдебиет", "name": "Синтаксис тренажері"}, {"category": "Тіл және әдебиет", "name": "Сөз таптарын анықтау"}, {"category": "Тіл және әдебиет", "name": "Мәтін құрастыру"}, {"category": "Тіл және әдебиет", "name": "Диалог тренажері"}, {"category": "Тіл және әдебиет", "name": "Оқылым тренажері"}, {"category": "Тіл және әдебиет", "name": "Диктант"}, {"category": "Тіл және әдебиет", "name": "Интерактивті диктант"}, {"category": "Тіл және әдебиет", "name": "Мазмұндама жоспары"}, {"category": "Тіл және әдебиет", "name": "Эссе жоспары"}, {"category": "Тіл және әдебиет", "name": "Эссе бағалағыш"}, {"category": "Тіл және әдебиет", "name": "Әдеби кейіпкер картасы"}, {"category": "Тіл және әдебиет", "name": "Сюжет картасы"}, {"category": "Тіл және әдебиет", "name": "Шығарма талдауы"}, {"category": "Тіл және әдебиет", "name": "Өлең талдауы"}, {"category": "Тіл және әдебиет", "name": "Мәтін редакторы"}, {"category": "Тіл және әдебиет", "name": "Сөздік карточкалары"}, {"category": "Тіл және әдебиет", "name": "Тілдік квест"}, {"category": "Тіл және әдебиет", "name": "Грамматика ойыны"}, {"category": "Тіл және әдебиет", "name": "Аударма тренажері"}, {"category": "Тіл және әдебиет", "name": "Сөйлеу практикасы"}, {"category": "Тіл және әдебиет", "name": "Әдеби дебат"}, {"category": "Тіл және әдебиет", "name": "Мәтінге сұрақ құрастыру"}, {"category": "Жоба және зерттеу", "name": "Ғылыми жоба конструкторы"}, {"category": "Жоба және зерттеу", "name": "Зерттеу сұрағы"}, {"category": "Жоба және зерттеу", "name": "Гипотеза құрастыру"}, {"category": "Жоба және зерттеу", "name": "Зерттеу жоспары"}, {"category": "Жоба және зерттеу", "name": "Жоба күнделігі"}, {"category": "Жоба және зерттеу", "name": "Сауалнама конструкторы"}, {"category": "Жоба және зерттеу", "name": "Кіріс сауалнамасы"}, {"category": "Жоба және зерттеу", "name": "Шығыс сауалнамасы"}, {"category": "Жоба және зерттеу", "name": "Дерек жинау формасы"}, {"category": "Жоба және зерттеу", "name": "Дерек талдау панелі"}, {"category": "Жоба және зерттеу", "name": "Нәтиже визуализациясы"}, {"category": "Жоба және зерттеу", "name": "Қорғау презентациясы"}, {"category": "Жоба және зерттеу", "name": "Жоба постері"}, {"category": "Жоба және зерттеу", "name": "Дереккөз тізімі"}, {"category": "Жоба және зерттеу", "name": "Зерттеу этикасы"}, {"category": "Жоба және зерттеу", "name": "Тәжірибе хаттамасы"}, {"category": "Жоба және зерттеу", "name": "Мониторинг тақтасы"}, {"category": "Жоба және зерттеу", "name": "Қорытынды генераторы"}, {"category": "Жоба және зерттеу", "name": "Ұсыныстар картасы"}, {"category": "Жоба және зерттеу", "name": "Жоба бағалау рубрикасы"}, {"category": "Жоспарлау және ЖИ", "name": "ҚМЖ конструкторы"}, {"category": "Жоспарлау және ЖИ", "name": "Сабақ сценарийі"}, {"category": "Жоспарлау және ЖИ", "name": "Сабақ мақсаты"}, {"category": "Жоспарлау және ЖИ", "name": "Оқу мақсаты талдағышы"}, {"category": "Жоспарлау және ЖИ", "name": "Бағалау критерийі"}, {"category": "Жоспарлау және ЖИ", "name": "Дескриптор генераторы"}, {"category": "Жоспарлау және ЖИ", "name": "Сабақ таймингі"}, {"category": "Жоспарлау және ЖИ", "name": "Үй тапсырмасы"}, {"category": "Жоспарлау және ЖИ", "name": "Мұғалім чек-парағы"}, {"category": "Жоспарлау және ЖИ", "name": "Оқушы чек-парағы"}, {"category": "Жоспарлау және ЖИ", "name": "AI чат-бот промпты"}, {"category": "Жоспарлау және ЖИ", "name": "AI агент промпты"}, {"category": "Жоспарлау және ЖИ", "name": "Вайб-кодинг промпты"}, {"category": "Жоспарлау және ЖИ", "name": "Сайт конструкторы"}, {"category": "Жоспарлау және ЖИ", "name": "HTML тренажер промпты"}, {"category": "Жоспарлау және ЖИ", "name": "Telegram бот сценарийі"}, {"category": "Жоспарлау және ЖИ", "name": "Промпт талдағышы"}, {"category": "Жоспарлау және ЖИ", "name": "Промпт жетілдіргіші"}, {"category": "Жоспарлау және ЖИ", "name": "Мастер промпт"}, {"category": "Жоспарлау және ЖИ", "name": "Мұғалім портфолиосы"}];const $=id=>document.getElementById(id);const fields=['subject','topic','audience','toolSearch','category','customTool','goal','difficulty','language','bloom','style','palette','customStyle','customPalette','visualBg','visualCards','visualMotion','visualIllustration','extra','offline','single','validation','responsive'];const featureNames=['Геймификация','Ұпай жүйесі','Кері байланыс','Таймер','Прогресс жолағы','Қате жауаптарды талдау','Қайта орындау','Нәтижені сақтау (localStorage)','Жауаптарды араластыру','Нәтижені басып шығару','Дыбыс','Анимациялар'];const teacherOnlyCategories=new Set(['Жоспарлау және ЖИ','Жоба және зерттеу']);function isClassroomTool(x){return !teacherOnlyCategories.has(x.category)&&!isPaper(x.name)}function isTeacherOnlyName(name){return CATALOG.some(x=>x.name===name&&teacherOnlyCategories.has(x.category))}const groups=[...new Set(CATALOG.filter(x=>!teacherOnlyCategories.has(x.category)).map(x=>x.category))];const storedKey='ai-prompt-lab-v2';let chosenTools=[];let toolParams={};let restoring=false;const safe=(v)=>String(v??'').trim();function option(value,text){const o=document.createElement('option');o.value=value;o.textContent=text;return o}function fillCategories(){const prev=$('category').value;$('category').replaceChildren(option('','Барлық санаттар'),...groups.filter(g=>CATALOG.some(x=>x.category===g&&isClassroomTool(x))).map(x=>option(x,x)));$('category').value=groups.includes(prev)?prev:''}function selectedTool(){return chosenTools.join(' + ')}
+function captureParams(){document.querySelectorAll('#conditional input').forEach(x=>{if(!toolParams[x.dataset.tool])toolParams[x.dataset.tool]={};toolParams[x.dataset.tool][x.dataset.index]=x.value})}
+function renderSelectedTools(){const box=$('selectedTools');box.replaceChildren();if(!chosenTools.length){box.textContent='Әзірге құрал таңдалмаған.';return}chosenTools.forEach((name,i)=>{const b=document.createElement('button');b.type='button';b.className='toolChip';b.textContent=(i+1)+'. '+name+' ×';b.setAttribute('aria-label',name+' — таңдаудан алып тастау');b.onclick=()=>toggleTool(name,false);box.append(b)})}
+function toggleTool(name,on){if(on&&isTeacherOnlyName(name))return;captureParams();if(on&&!chosenTools.includes(name))chosenTools.push(name);if(!on)chosenTools=chosenTools.filter(x=>x!==name);fillTools();renderConditional();update()}
+function fillTools(){const q=safe($('toolSearch').value).toLocaleLowerCase('kk');const cat=$('category').value;const list=CATALOG.filter(isClassroomTool).filter(x=>(!cat||x.category===cat)&&(!q||x.name.toLocaleLowerCase('kk').includes(q)));const box=$('toolOptions');box.replaceChildren();list.forEach(x=>{const label=document.createElement('label');label.className='toolChoice';const input=document.createElement('input');input.type='checkbox';input.value=x.name;input.checked=chosenTools.includes(x.name);input.onchange=()=>toggleTool(x.name,input.checked);label.append(input,document.createTextNode(x.name));box.append(label)});if(!list.length)box.textContent='Құрал табылмады. Басқа сөзбен іздеңіз немесе өз құралыңызды қосыңыз.';$('count').textContent=`Сүзгіде ${list.length} құрал · Таңдалғаны: ${chosenTools.length}`;renderSelectedTools()}
+function addCustomTool(){const name=safe($('customTool').value);if(!name){$('customTool').focus();return}$('customTool').value='';toggleTool(name,true)}
+$('addCustomTool').onclick=addCustomTool;$('customTool').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addCustomTool()}});
+function typeConfig(name){
+const n=name.toLocaleLowerCase('kk');
+const configs=[
+[/көп жауапты тест/, [['Сұрақ саны','5'],['Жауап форматы','Әр сұрақта 4–6 нұсқа, кемінде 2 дұрыс жауап; құсбелгімен таңдау'],['Бағалау','Барлық дұрыс нұсқалар таңдалып, қате нұсқа белгіленбесе ғана толық балл'],['Кері байланыс','Әр дұрыс және қате нұсқаны түсіндіру']]],
+[/суретті тест/, [['Сұрақ саны','5'],['Суреттер','Пайдаланушы берген суреттерді қолдан; сурет жоқ болса, сұрат'],['Жауап форматы','Суретті талдап, 4 нұсқадан 1 дұрыс жауап таңдау'],['Бағалау','Әр дұрыс жауапқа 1 балл және суретке сүйенген түсіндірме']]],
+[/сөз таптарын сұрыптау|сұрыптау|себетке|дәуірлерді сұрыптау/, [['Сөз/карточка саны','20'],['Санаттар және олардың саны','4 санат: зат есім, сын есім, сан есім, етістік'],['Орындалу механикасы','Карточканы таңдап, санатқа орналастыру; телефонда сүйреусіз де жұмыс істеу'],['Дұрыс және қате жауапқа әрекет','Дұрыс жауапқа ұпай, қатеге қысқа түсіндірме']]],
+[/ұбт|тест|викторина|бжб|тжб|емтихан|бақылау|сұрақтар банкі/, [['Сұрақ саны','25'],['Жауап форматы','4 нұсқа, 1 дұрыс жауап'],['Бағалау және кері байланыс','Әр дұрыс жауапқа 1 балл; соңында қате жауаптарды түсіндіру'],['Тапсыру тәртібі','Бір сұрақтан көрсету, соңында нәтижені шығару']]],
+[/сәйкестендіру|жұптарды тап|домино/, [['Сәйкестендіру жұптарының саны','10 жұп'],['Сәйкестендіру механикасы','Екі бағандағы элементтерді басып жұптастыру'],['Тексеру тәртібі','Әр жұпты тексеріп, қате болса қайта таңдауға мүмкіндік беру']]],
+[/презентация|слайд/, [['Слайд саны','10'],['Слайд құрылымы','Тақырып → мақсат → негізгі мазмұн → тапсырма → қорытынды'],['Интерактивтілік','Навигация батырмалары және қажет болса сұрақтар'],['Әр слайдтағы мәтін көлемі','Қысқа әрі оқуға ыңғайлы']]],
+[/хронология|таймлайн|күнтізбе|реттілікті/, [['Оқиғалар саны','10'],['Уақыт ауқымы','Тақырыпқа сай нақты жылдарды көрсет'],['Орындалу механикасы','Оқиғаларды уақыт бойынша орналастыру'],['Тексеру','Дұрыс реттілік пен қате орындарды көрсету']]],
+[/карта|маршрут|географ/, [['Нысандар саны','8'],['Карта/аймақ','Тақырыпқа сәйкес географиялық аймақ'],['Оқушы әрекеті','Нысанды таңдап, орналасуын және маңызын анықтау'],['Дәлдік талабы','Нақты географияны ойдан шығарма; карта берілмесе сызбалық екенін белгіле']]],
+[/симулятор|сценарий|рөлдік ойын|тарихи сот|кейс|жағдаят/, [['Сценарий саны','3'],['Шешім кезеңдері','Әр сценарийде 3 шешім'],['Оқушы әрекеті','Нұсқаны таңдап, дәлелін енгізу'],['Нәтиже логикасы','Әр шешімнің ықтимал салдарын түсіндіру; тарихи факт пен болжамды ажырату']]],
+[/квест|escape|лабиринт|миссия|қазына|детектив/, [['Кезең саны','5'],['Кезеңнен өту шарты','Дұрыс тапсырма/код арқылы келесі кезең ашылады'],['Көмек жүйесі','Қажет болса бір ишара көрсету'],['Аяқтау шарты','Барлық кезеңді орындаған соң қорытынды нәтиже']]],
+[/қмж|сабақ сценарийі|сабақ таймингі/, [['Сабақ ұзақтығы','45 минут'],['Оқу мақсатының коды','Нақты кодты мұғалім енгізеді; ойдан шығарма'],['Сабақ кезеңдері','Басы → ортасы → соңы; уақыт, әрекет, бағалау, ресурстар']]],
+[/жұмыс парағы|карточка|парақ|choice board|tic-tac-toe/, [['Тапсырма саны','8'],['Формат','A4 тік'],['Орындау тәртібі','Оқушы тапсырманы ретімен немесе таңдау бойынша орындайды'],['Жауап кілті','Мұғалімге бөлек жауап пен дескриптор бер']]],
+[/ғылыми жоба|зерттеу|сауалнама|эксперимент/, [['Зерттеу сұрағы','Нақты зерттеу сұрағын енгізіңіз'],['Деректер мен әдістер','Дереккөздер, сауалнама немесе тәжірибе'],['Практикалық өнім','Өлшенетін нәтиже немесе прототип'],['Адалдық талабы','Нәтижені, сауалнама санын және дереккөзді ойдан қоспа']]],
+[/инфографика|постер|плакат|скетчноут|комикс|диаграмма|кластер|интеллект-карта/, [['Ақпараттық блок саны','6'],['Визуал құрылымы','Тақырып → негізгі ұғымдар → мысал → қорытынды'],['Өлшемі','A4 тік немесе 16:9'],['Мәтін талабы','Қысқа, қатесіз, қазақша']]],
+[/чат-бот|ai агент|telegram бот/, [['Диалог сценарийлері','5'],['Пайдаланушы енгізетін дерек','Сұрақ немесе тақырып'],['Жауап беру тәртібі','Түсіндіру → нақтылау → кері байланыс'],['Қауіпсіздік','Жеке деректерді сұрама және құпия кілтті HTML ішіне салма']]]
+];
+for(const [rx,fields] of configs)if(rx.test(n))return fields;
+return [['Негізгі элемент саны','10'],['Оқушы әрекеті','Тапсырманы орындап, нәтижесін тексереді'],['Кері байланыс тәртібі','Нақты, қысқа түсіндірме']];
+}
+function renderConditional(){captureParams();const box=$('conditional');box.replaceChildren();chosenTools.forEach((name,n)=>{const group=document.createElement('fieldset');group.className='toolParamGroup';const title=document.createElement('legend');title.textContent=(n+1)+'. '+name;group.append(title);typeConfig(name).forEach(([label,example],i)=>{const l=document.createElement('label');const inp=document.createElement('input');inp.id='param-'+n+'-'+i;l.htmlFor=inp.id;l.textContent=label;inp.dataset.index=i;inp.dataset.tool=name;inp.placeholder=example;inp.value=toolParams[name]?.[i]||'';inp.addEventListener('input',update);group.append(l,inp);const hint=document.createElement('small');hint.className='note';hint.textContent='Ұсыныс: '+example;group.append(hint)});box.append(group)})}
+
+function designBrief(){const st=safe($('customStyle').value)||$('style').value;let rule;
+if(/газет/i.test(st))rule='Газет композициясын қолдан: ірі басылым атауы, айдарлар, жіңішке бөлгіштер, баспаға тән serif тақырыптар; тапсырмаларды мақалалар ретінде 2–3 бағанға орналастыр, телефонда 1 бағанға ауыстыр. Суреттерге қысқа түсіндірме қос. Нақты емес шығарылым деректерін тарихи факт ретінде көрсетпе.';
+else if(/академиялық|ғылыми|ресми|энциклопедиялық|оқулық/i.test(st))rule='Академиялық бет: нөмірленген бөлімдер, анық тақырып иерархиясы, кең жиектер, мазмұнға сай кестелер, дерек үзінділері және дереккөзге арналған орын. Артық ойын әшекейлерінсіз, ұстамды және анық композиция.';
+else if(/қолжазба|пергамент|архив|винтаж/i.test(st))rule='Құжат композициясы: қағаздың нәзік фактурасы, serif тақырыптар, құжат айдарлары, нөмірленген үзінділер мен жиек ескертпелері. Негізгі мәтін анық оқылсын; жалған мөрді немесе деректі шынайы архив құжаты деп көрсетпе.';
+else if(/комикс|storybook|мультфильм/i.test(st))rule='Оқиға панельдері, ірі иллюстрациялар, қысқа репликалар және анық кадр реті арқылы композиция құр. Тапсырмаларды кадрлармен байланыстыр; оқу мәтіні сурет ішінде жоғалмасын.';
+else if(/ойын|квест|escape|adventure|rpg|arcade|game|treasure|детектив/i.test(st))rule='Таңдалған ойын стиліне сәйкес кезеңдер мен тапсырмалар композициясын құр. Прогресс пен әрекет батырмалары ойын механикасын түсіндірсін; көрініс пен орындалатын әрекеттер бір-біріне сай болсын.';
+else rule='«'+st+'» стилін композиция, қаріп, аралық, шекаралар және визуалдар арқылы нақты көрсет. Тек фон түсін ауыстырумен шектелме; барлық бөлімде стиль бірізді болсын.';
+const opts=[['Фон','visualBg'],['Карточка стилі','visualCards'],['Анимация','visualMotion'],['Иллюстрация','visualIllustration']].map(([l,id])=>'- '+l+': '+($(id).value==='Автоматты'?'таңдалған визуалды стильге үйлестір':$(id).value)).join('\n');
+return '- Стильдің нақты орындалуы: '+rule+'\n'+opts+'\n- Дизайнды аяқтағанда таңдалған стильдің құрылымнан, қаріптен және визуалдардан көрінуін тексер. Стиль мәтіннің оқылуына және тапсырмалардың орындалуына кедергі жасамасын.';
+}
+
+function getFeatures(){return [...$('features').querySelectorAll('input:checked')].map(x=>x.value)}function promptText(){const topic=safe($('topic').value)||'[тақырыпты енгізіңіз]';const aud=safe($('audience').value)||'[сыныпты енгізіңіз]';const goal=safe($('goal').value)||'[нақты оқу мақсатын енгізіңіз]';const tool=selectedTool()||'[құрал түрін таңдаңыз]';const config=[...$('conditional').querySelectorAll('input')].map(x=>`${x.dataset.tool} / ${typeConfig(x.dataset.tool)[Number(x.dataset.index)][0]}: ${safe(x.value)||typeConfig(x.dataset.tool)[Number(x.dataset.index)][1]}`);const f=getFeatures();const tech=[ $('responsive').checked?'Телефон (320px+), планшет және компьютерге бейімделсін.':'', $('offline').checked?'Интернетсіз жұмыс істесін.':'', $('single').checked?'HTML, CSS және JS бір .html файлында болсын.':'', $('validation').checked?'Енгізу мен қате әрекеттерді тексеру (validation) болсын.':''].filter(Boolean);return `Сен тәжірибелі педагогикалық дизайнер және Senior Frontend әзірлеушісің.\n\nТАПСЫРМА:\n${safe($('subject').value)||'[пән]'} пәнінен «${topic}» тақырыбы бойынша ${aud} оқушыларына арналған ${chosenTools.length>1?`мына ${chosenTools.length} құралды біріктіретін біртұтас оқу өнімін жаса: ${tool}. Әр құралды жеке бөлімге орналастыр, бөлімдерге түсінікті навигация бер. Таңдалған құралдардың ешқайсысын түсіріп қалдырма; әрқайсысының параметрлерін бөлек орында.`:`«${tool}» құралын жаса.`}\n\nМАҚСАТ:\n- Оқушылар меңгеретін нақты дағды: ${goal}\n- Қиындық деңгейі: ${$('difficulty').value}\n- Тіл: ${$('language').value}\n- Блум деңгейі: ${$('bloom').value}\n\nҚҰРАЛҒА ТӘН ПАРАМЕТРЛЕР:\n${config.length?config.map(x=>'- '+x).join('\n'):'- Құралдың жұмыс логикасын оқу мақсатына сай анықта.'}\n\nФУНКЦИОНАЛДЫЛЫҚ:\n${f.length?f.map(x=>'- '+x).join('\n'):'- Қарапайым әрі түсінікті функционал.'}\n- Пайдаланушы өз нәтижесін бірден көре алсын (құрал түріне сәйкес болса).\n- Оқушыға түсінікті кері байланыс берілсін.\n\nДИЗАЙН:\n- Визуалды стиль: ${safe($('customStyle').value)||$('style').value}\n- Түсті палитра: ${safe($('customPalette').value)||$('palette').value}\n${designBrief()}\n- Оқуға ыңғайлы қаріптер мен айқын батырмалар қолданылсын.\n\nТЕХНИКАЛЫҚ ТАЛАПТАР:\n${tech.length?tech.map(x=>'- '+x).join('\n'):'- Таза, түсінікті код жаз.'}\n- Сыртқы кітапханаларды қолданба; сыртқы серверге дерек жіберме.\n- Егер нәтиже сақтау таңдалса, localStorage қолданып, сақтау мүмкін болмаған жағдайда қатені өңде.\n\nМАЗМҰН ЖӘНЕ САПА:\n- Нақты деректерді ойдан қоспа. Берілген материал жоқ болса, тек үлгі екенін белгіле.\n- Сұрақтар, жауаптар және бағалау логикасы бір-біріне сәйкес болсын.\n- Құралды іске қосу және тексеру нұсқаулығын қос.\n\nҚОСЫМША ТАЛАПТАР:\n${safe($('extra').value)||'Қосымша талап жоқ.'}\n\nНӘТИЖЕ:\nТолық жұмыс істейтін өнімді дайында; барлық қажетті кодты бер және негізгі әрекеттерді тексер.`}function update(){ $('output').textContent=promptText();save()}function save(){if(restoring)return;try{captureParams();const state={};fields.forEach(id=>state[id]=$(id).type==='checkbox'?$(id).checked:$(id).value);state.features=getFeatures();state.chosenTools=chosenTools;state.toolParams=toolParams;localStorage.setItem(storedKey,JSON.stringify(state))}catch(e){$('message').textContent='Ескерту: браузер деректерді сақтауға рұқсат бермеді.'}}
+function restore(){restoring=true;try{const state=JSON.parse(localStorage.getItem(storedKey)||'null');if(!state)return;fields.filter(x=>x!=='category').forEach(id=>{if(state[id]!==undefined){if($(id).type==='checkbox')$(id).checked=!!state[id];else $(id).value=state[id]}});fillCategories();$('category').value=groups.includes(state.category)?state.category:'';chosenTools=Array.isArray(state.chosenTools)?[...new Set(state.chosenTools.filter(x=>typeof x==='string'&&x.trim()))]:(state.customTool||state.tool?[state.customTool||state.tool]:[]);chosenTools=chosenTools.filter(name=>!isTeacherOnlyName(name)&&!isPaper(name));if(!Array.isArray(state.chosenTools))$('customTool').value='';toolParams=state.toolParams&&typeof state.toolParams==='object'?state.toolParams:{};if(!state.toolParams&&chosenTools.length===1&&state.conditional)toolParams[chosenTools[0]]=Object.fromEntries(state.conditional.map((x,i)=>[i,x]));fillTools();renderConditional();$('features').querySelectorAll('input').forEach(x=>x.checked=state.features?.includes(x.value)||false)}catch(e){$('message').textContent='Сақталған баптауларды оқу мүмкін болмады.'}finally{restoring=false}}
+function valid(){if(safe($('customTool').value))addCustomTool();const missing=[['topic','тақырып'],['audience','сынып'],['goal','оқу мақсаты']].filter(([id])=>!safe($(id).value)).map(x=>x[1]);if(!selectedTool())missing.push('құрал түрі');if(missing.length){$('message').textContent='Толтырыңыз: '+missing.join(', ');$('message').classList.add('err');return false}$('message').classList.remove('err');$('message').textContent='Промпт дайын. Көшіріп, ЖИ чатына енгізіңіз.';return true}function download(){if(!valid())return;const blob=new Blob([promptText()],{type:'text/markdown;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='AI_PROMPT_LAB_prompt.md';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+
+const STYLE_PALETTES={
+ 'Пергамент':['Пергамент + қоңыр','Сепия','Қоңыр + алтын','Бордо + алтын'],
+ 'Ескі карта':['Пергамент + қоңыр','Сепия','Зәйтүн + беж'],
+ 'Архив құжаты':['Бордо + крем','Сепия','Қоңыр + алтын'],
+ 'Қазақы ұлттық':['Көгілдір + алтын','Көк + алтын','Изумруд + алтын','Ақ + көгілдір'],
+ 'Ұлы Дала':['Көгілдір + алтын','Қоңыр + алтын','Зәйтүн + беж'],
+ 'Futuristic':['Navy + cyan','Күлгін + көк','Neon','Көк-күлгін градиент'],
+ 'Clean UI':['Көк + ақ','Қою көк + ақ + сұр','Графит + ақ'],
+ 'Bento Grid':['Қою көк + ақ + сұр','Navy + cyan','Күлгін + көк'],
+ 'Eco':['Eco Green','Forest','Botanical','Sand & Sage'],
+ 'Eco-futurism':['Eco Green','Navy + cyan','Көгілдір-жасыл градиент'],
+ 'Мультфильм':['Жарқын','Pastel Rainbow','Candy','Көк + сары'],
+ 'Ойын стилі':['Жарқын','Көгілдір + қызғылт сары','Neon','Pastel Rainbow'],
+ 'Әскери штаб картасы':['Хаки + қоңыр','Зәйтүн + беж','Қою жасыл + алтын']
+};
+
+function syncPaletteToStyle(){
+ const st=$('style').value, allowed=STYLE_PALETTES[st];
+ if(!allowed) return;
+ const sel=$('palette');
+ [...sel.options].forEach(o=>o.dataset.match=allowed.includes(o.value)?'1':'0');
+ if(!allowed.includes(sel.value)) sel.value=allowed[0];
+ update();
+}
+$('style').addEventListener('change',syncPaletteToStyle);
+
+const TEACHER_TOOLS={
+ pedagogical:["ҚМЖ конструкторы", "Презентация", "ҰБТ: сұрақ–жауап қоры", "Қазақстан тарихы — тест", "Дүниежүзі тарихы — тест", "Саралап оқыту — А/В/С", "БЖБ", "ТЖБ", "Олимпиадалық эссе — деректер негізінде", "Олимпиадалық эссе — критерийлер бойынша"],
+ digital:[
+  'Интерактивті сайт конструкторы','HTML тренажер','Білім беру порталы','Telegram бот','AI чат-бот','AI агент',
+  'Сауалнама және нәтиже жинау жүйесі','Интерактивті dashboard','Деректерді талдау құралы','Цифрлық симулятор',
+  'Оқу платформасының прототипі','Автоматты кері байланыс жүйесі','Электронды портфолио','QR оқу станциялары','Интерактивті анықтамалық'
+ ]
+};
+const PED_MODELS={"Презентация": {"fields": [["Негізгі мәтін / дереккөздер", "", "textarea", null], ["Слайд саны", "10–11", "text", null], ["Мазмұнды қамту", "95–98%", "text", null], ["Қосымша дерек", "Қоспау", "select", ["Қоспау", "Тексерілген дереккөзден 10%-ға дейін"]], ["Стиль", "Академиялық", "text", null], ["Көрнекіліктер", "Кесте; диаграмма; инфографика; тарихи сурет; нақты карта", "text", null], ["Мазмұнды орналастыру", "Слайд + мұғалімнің түсіндіру жазбасы", "select", ["Слайд + мұғалімнің түсіндіру жазбасы", "Тек слайд мәтіні"]]], "rules": "Сен жоғары білікті тарихшы-әдіскер әрі педагогсың. Қазақ тіліндегі презентация жоспарын және әр слайдтың толық мазмұнын жаса. Алдымен 5–7 күрделі терминнің қазақша атауы мен түсіндірмесін бер. Орысша сөздер мен кальканы қолданба; әр слайдтың тілін тексер. Бастапқы мәтіннің ретін араластырма; мүмкін болғанда хронологияны сақта. Негізгі материалдың көрсетілген үлесін және маңызды деректерін қамты. Әр слайд: нақты тақырып, қысқа тармақтар, көрнекілік сипаттамасы. Мұғалім жазбасы таңдалса, кең түсіндірмені соған шығар. Мәтін көлемі слайд санына сыймаса, қайшылықты көрсет. Кестелер салыстыруға, диаграммалар нақты санға сүйенсін. Суреттер шындыққа жанассын, карта ойдан жасалмасын. Қосымша ақпарат рұқсат етілсе ғана қос және дереккөзін көрсет."}, "ҰБТ: сұрақ–жауап қоры": {"fields": [["Негізгі мәтін / дереккөздер", "", "textarea", null], ["Сұрақ саны", "Мәтін көлеміне қарай", "text", null], ["Спецификация / бағалау талаптары (жылы, мәтіні немесе сілтемесі)", "", "textarea", null]], "rules": "Сен тарих пәнінен ҰБТ-ға дайындайтын сарапшы-әдіскерсің. Тек соңғы ұсынылған мәтіндегі маңызды даталар, тұлғалар, терминдер және себеп-салдар негізінде сұрақ–жауап қорын жаса. Өзге тақырып пен ойдан ақпарат қоспа. Сұраулы сөзсіз, анықтамалық/тұжырымдамалық стиль қолдан: «... мерзімі: жауап». Әр тұжырым дербес, толық мағыналы болсын. Дерек ретін сақта. Көп жауапты деректердің барлық жауабын анықтамалық форматта тіз. Нәтиже: 1. Тұжырым: **Нақты жауап**. Негізгі деректерге басымдық бер, емтиханда кездесу ықтималдығын дәлелсіз мәлімдеме. Берілген спецификацияны қолдан; құжат жоқ болса сәйкестікті расталған деп көрсетпе."}, "Қазақстан тарихы — тест": {"fields": [["Негізгі мәтін / дереккөздер", "", "textarea", null], ["Бір дұрыс жауапты тапсырма саны", "6", "number", null], ["Қате жауапты анықтау саны", "2", "number", null], ["Сәйкестендіру саны", "2", "number", null], ["Көп жауапты тапсырма саны", "2", "number", null], ["Логикалық / мазмұндық тапсырма саны", "2", "number", null], ["Нұсқа", "Мұғалім нұсқасы", "select", ["Мұғалім нұсқасы", "Оқушы нұсқасы"]], ["Спецификация / бағалау талаптары (жылы, мәтіні немесе сілтемесі)", "", "textarea", null]], "rules": "Сен тарих пәнінен ҰБТ-ға дайындайтын сарапшы-әдіскерсің. Барлық ұсынылған тапсырма мен деректерді қарастырып, тек берілген мәтін аясында тест жаса. Тұжырымдар сұраулы сөзсіз, дербес, аяқталған және түсінікті болсын. Өзге тақырып қоспа. Қате нұсқалар негізгі жауапқа мағыналық жақын, қисынды әрі бірмәнді ажыратылатын болсын. Бір дұрыс жауапты сұрақтарда A–D кілттері шамалас тең бөлінсін (төртке бөлінсе 25%-дан); реті аралас, механикалық қайталанатын тізбексіз болсын. Теңгерімді көп жауапты сұрақтарға күштеп қолданба. Мұғалім нұсқасында дұрыс жауаптарды **қалың** белгіле; оқушы нұсқасында белгілеме. Соңында жеке жауап кілтін бер. Спецификация берілсе салыстыр, қайшылықты көрсет; берілмесе сәйкестікті расталған деп жазба. Қазақстан тарихы. Барлық таңдаулы тапсырмаларда A–D. Көп жауапты тапсырмаларда 2 немесе 3 дұрыс жауап санын нұсқаулықта көрсет. Даталарды ғана таңдауға басымдық берме: мерзімді тұжырымда беріп, оқиғаны не үдерісті анықтат."}, "Дүниежүзі тарихы — тест": {"fields": [["Негізгі мәтін / дереккөздер", "", "textarea", null], ["Бір дұрыс жауапты тапсырма саны", "6", "number", null], ["Қате жауапты анықтау саны", "2", "number", null], ["Сәйкестендіру саны", "2", "number", null], ["Көп жауапты тапсырма саны", "2", "number", null], ["Логикалық / мазмұндық тапсырма саны", "2", "number", null], ["Нұсқа", "Мұғалім нұсқасы", "select", ["Мұғалім нұсқасы", "Оқушы нұсқасы"]], ["Спецификация / бағалау талаптары (жылы, мәтіні немесе сілтемесі)", "", "textarea", null]], "rules": "Сен тарих пәнінен ҰБТ-ға дайындайтын сарапшы-әдіскерсің. Барлық ұсынылған тапсырма мен деректерді қарастырып, тек берілген мәтін аясында тест жаса. Тұжырымдар сұраулы сөзсіз, дербес, аяқталған және түсінікті болсын. Өзге тақырып қоспа. Қате нұсқалар негізгі жауапқа мағыналық жақын, қисынды әрі бірмәнді ажыратылатын болсын. Бір дұрыс жауапты сұрақтарда A–D кілттері шамалас тең бөлінсін (төртке бөлінсе 25%-дан); реті аралас, механикалық қайталанатын тізбексіз болсын. Теңгерімді көп жауапты сұрақтарға күштеп қолданба. Мұғалім нұсқасында дұрыс жауаптарды **қалың** белгіле; оқушы нұсқасында белгілеме. Соңында жеке жауап кілтін бер. Спецификация берілсе салыстыр, қайшылықты көрсет; берілмесе сәйкестікті расталған деп жазба. Дүниежүзі тарихы. Бір дұрыс жауапта A–D; көп жауапта A–F, 1–3 дұрыс жауап. Көптік жалғауды жақшада міндетті қолдан: белгі (-лер), нәтижесі (-лері), себебі (-дері), тұлға (-лар)."}, "Саралап оқыту — А/В/С": {"fields": [["Оқу мақсаттарының кодтары мен толық мәтіні", "", "textarea", null], ["Негізгі мәтін / дереккөздер", "", "textarea", null], ["А деңгейі тапсырма саны", "3", "number", null], ["В деңгейі тапсырма саны", "3", "number", null], ["С деңгейі тапсырма саны", "2", "number", null], ["А деңгейі әдістері", "Сәйкестендіру; ақиқат/жалған; термин; карта; кесте", "text", null], ["В деңгейі әдістері", "Дәлелді жауап; Венн диаграммасы; логикалық тізбек", "text", null], ["С деңгейі әдістері", "Жағдаят; ПТМС/ПОПС; РАФТ; дебат; SWOT; баламалы шешім", "text", null], ["Оқушыға қажетті қолдау", "", "textarea", null]], "rules": "Сен саралап оқыту әдіскерісің. А: білу, тану, еске түсіру; В: қолдану, салыстыру, себеп-салдарды талдау; С: жинақтау, бағалау, дәлелдеу тапсырмаларын жаса. Таңдалған әдістерді оқу мақсатына сәйкес қолдан. Әр тапсырмаға оқушыға түсінікті нұсқаулық пен өлшенетін қадамдық дескрипторды өзің құрастыр. Деңгейлер оқушыға тұрақты таңба емес, тапсырма күрделілігін білдірсін. Соңында А/В нақты жауаптары, ашық сұрақтарға қабылданатын жауаптар, С үшін ықтимал дәлелдер мен кілт сөздер бер. Негізді балама жауап қабылдансын. Басып шығаруға дайын, жауап жазатын орны бар парақ; мұғалім кілті бөлек. Артық кіріспе қоспа."}, "БЖБ": {"fields": [["Бөлім атауы", "", "text", null], ["Оқу мақсаттарының кодтары мен толық мәтіні", "", "textarea", null], ["Негізгі мәтін / дереккөздер", "", "textarea", null], ["Орындау уақыты (минут)", "20", "number", null], ["Жалпы балл", "15", "number", null], ["Ашық жауап түрі", "ПТМС", "select", ["ПТМС", "Эссе"]], ["Спецификация / бағалау талаптары (жылы, мәтіні немесе сілтемесі)", "", "textarea", null]], "rules": "Сен жоғары санатты сарапшы-әдіскерсің. Оқу мақсаттарына сәйкес БЖБ жаса. 1: контекстік ғылыми/тарихи мәтін және 2–3 проблемалық сұрақ (қолдану/талдау). 2: кемінде 3–4 өлшем бойынша салыстырмалы кесте және қорытынды (талдау/жинақтау). 3: фактіге сүйенген авторлық позицияны қорғайтын эссе немесе ПТМС (бағалау). Әр тапсырмада ойлау деңгейін жақшада көрсет. Критерийлер мен қадамдық дескрипторларды өзің жаса. Әр қадамның баллы анық болсын, қосындылар жалпы балға тең болсын. Соңында Тапсырма № | Бағалау критерийі | Дескриптор | Балл кестесі және жеке толық жауап кілті бер. Ашық жауапта ықтимал жауаптар мен кілт сөздер, балама негізді жауапты қабылдау шарттары болсын. Құрастырылған мәтінді түпнұсқа тарихи құжат деп көрсетпе. Құрылым: тақырып, оқу мақсаттары, уақыт, балл, тапсырмалар, дескрипторлар, жауаптар. Кіріспесіз баспаға дайын бер."}, "ТЖБ": {"fields": [["Тоқсан", "1", "select", ["1", "2", "3", "4"]], ["Оқу мақсаттарының кодтары мен толық мәтіні", "", "textarea", null], ["Негізгі мәтін / дереккөздер", "", "textarea", null], ["Әр нұсқадағы тапсырма саны", "4", "select", ["4", "5"]], ["Орындау уақыты (минут)", "40", "number", null], ["Жалпы балл", "20", "number", null], ["Спецификация / бағалау талаптары (жылы, мәтіні немесе сілтемесі)", "", "textarea", null]], "rules": "Сен ТЖБ әзірлейтін сарапшы-әдіскерсің. Құрылымы мен қиындық деңгейі тең, сұрақтары әртүрлі 2 нұсқа жаса. Сәйкес тапсырмалардың оқу мақсаты, ойлау деңгейі, баллы және жұмыс көлемі тең болсын. Әр тапсырманың алдында ОМ коды мен толық мәтінін жақшада көрсет. Міндетті түрлер: бір дұрыс жауапты жабық тест, сәйкестендіру, мәтінді талдау, дәлелді эссе немесе ПОПС/ПТМС. Балл үлестері: 30% білу/түсіну; 50% қолдану/талдау; 20% жинақтау/бағалау. Тапсырма саны емес, балл үлесі есептеледі. Әр нұсқаға осы үлестер мен баллдардың қосындысын тексер. Соңында екі нұсқаға бөлек Тапсырма № | Жауап кілті | Қадамдық дескриптор | Балл кестесін жаса. Толық жауаптар және ашық сұрақтарға ықтимал дәлелдер бер. Спецификация қайшы болса, нақтылауды сұра; талаптарды үнсіз өзгертпе. Қазақ тілінде баспаға дайын бер."}, "Олимпиадалық эссе — деректер негізінде": {"fields": [["Негізгі мәтін / дереккөздер", "", "textarea", null], ["Сөз көлемі", "600–700", "text", null], ["Негізгі деректерді қамту", "Кемінде 90%", "text", null], ["Қосымша дерек", "Тексерілген дереккөзден 10–15%-ға дейін", "text", null], ["Дәйексөздер / дереккөздері", "", "textarea", null]], "rules": "Тарихты терең білетін дарынды оқушының атынан олимпиадалық эссе жаз. Кіріспе, дәлелді негізгі бөлім, қорытынды болсын. Нақты тезис → тарихи факт → талдау байланысын сақта. Хронологияны, негізгі даталарды, тұлғаларды, географиялық атауларды қамты. Тілі жасқа сай жеңіл, академиялық сауатты, әсірелеусіз болсын. 2–3 дәлме-дәл тексерілген дәйексөзді авторымен және дереккөзімен бер; расталмаса дәйексөз ойлап таппа. Қорытындыда бүгінгі қоғаммен сабақтастығын негізді талда. Берілген сөз көлемі мен мазмұнды қамту қайшы болса, нақтыла. Соңында нақты сөз санын көрсет."}, "Олимпиадалық эссе — критерийлер бойынша": {"fields": [["Негізгі мәтін / дереккөздер", "", "textarea", null], ["Сөз саны", "650", "number", null], ["Бағалау кестесі (50 ұпайдың бөлінуі)", "", "textarea", null], ["Авторлық позиция (міндетті емес)", "", "textarea", null]], "rules": "Сен олимпиадаға дайындайтын тарихшы-педагогсің. Таңдалған сынып оқушысының атынан эссе жаз; мәтін бойында басқа сыныпқа ауыспа. Кіріспе, дәлелдерге арналған абзацтар, қорытынды және логикалық байланыс сақталсын. Айқын авторлық позицияны тарихи фактіге сүйенген кемінде 4–5 дәлелмен қорға. Әр дәлелде себеп-салдарды талда; жай баяндаумен шектелме. Даталар, есімдер, ұйымдар, терминдер дәл болсын. Қорытынды дәлелдерден туындап, тарихи баға берсін. Тіл дарынды оқушыға лайық түсінікті, ғылыми демагогиясыз болсын. 50 ұпайлық кесте берілсе сонымен тексер; берілмесе ұпай бөлінісін ойдан шығарма, 100% сәйкестікке кепілдік берме. Соңында сөз санын көрсет."}};
+function pedagogicalPrompt(){const model=PED_MODELS[teacherTool];const params=model.fields.map((f,i)=>f[0]+': '+(safe($('tp'+i)?.value)||'[берілмеген; қажет болса сұрат]')).join('\n');return `Сен тәжірибелі мұғалім-әдіскерсің.
+Құрал: ${teacherTool}
+Пән: ${safe($('tSubject').value)||'[пән]'}
+Сынып: ${safe($('tAudience').value)||'[сынып]'}
+Тақырып: ${safe($('tTopic').value)||'[тақырып]'}
+Қосымша мақсат: ${safe($('tGoal').value)||'—'}
+
+ПАРАМЕТРЛЕР:
+${params}
+
+МІНДЕТТІ ТАЛАПТАР:
+${model.rules}
+Барлық мәтін қазақ тілінде сауатты, жас ерекшелігіне сай болсын. Критерийлер мен дескрипторлар қажет жерде тапсырмалардан автоматты әзірленсін. Деректер, ОМ кодтары, дәйексөздер мен сілтемелер ойдан жасалмасын. Файл/скриншотты осы промптпен бірге ЖИ чатына тіркеу қажет; көрінбейтін деректі ойдан толықтырма.
+Қосымша талаптар: ${safe($('tExtra').value)||'—'}`}
+const TPARAMS={
+ 'ҚМЖ конструкторы':['Сабақ ұзақтығы','Оқу мақсаты','Сабақ кезеңдері','Бағалау және саралау'],
+ 'Сабақ сценарийі':['Сабақ ұзақтығы','Сценарий кезеңдері','Мұғалім әрекеті','Оқушы әрекеті'],
+ 'Бағалау критерийі':['Оқу мақсаты','Бағаланатын дағды','Критерий саны','Дескриптор форматы'],
+ 'Ғылыми жоба құрылымы':['Зерттеу тақырыбы','Жоба көлемі','Практикалық өнім','Зерттеу әдістері'],
+ 'Telegram бот':['Бот мақсаты','Негізгі командалар','Диалог сценарийі','Дерек сақтау қажеттілігі','Қауіпсіздік талаптары'],
+ 'AI чат-бот':['Чат-бот рөлі','Білім базасы','Пайдаланушы сценарийлері','Жауап шектеулері','Қауіпсіздік'],
+ 'AI агент':['Агент мақсаты','Орындайтын әрекеттер','Құралдар/дереккөздер','Рұқсат шектері','Қате өңдеу'],
+ 'Интерактивті сайт конструкторы':['Беттер/бөлімдер','Негізгі функциялар','Responsive талаптары','Дерек сақтау','Технология'],
+ 'HTML тренажер':['Тапсырма саны','Тапсырма механикасы','Бағалау','Кері байланыс','Offline режим'],
+ 'Цифрлық симулятор':['Сценарийлер','Шешім кезеңдері','Пайдаланушы әрекеті','Нәтиже логикасы','Дерек сақтау']
+};
+let teacherDirection='pedagogical',teacherTool='';let teacherDrafts={};let teacherRestoring=false;
+
+const QMJ_SECTIONS=[
+ ['Сабақтың базалық ақпараты',[
+ ['qSection','Бөлім','text','', 'Оқу бағдарламасындағы бөлім атауы'],['qTeacher','Педагогтің Т.А.Ө.','text','','Аты-жөні'],['qDate','Күні','date',''],
+ ['qPresent','Қатысушылар саны','number',''],['qAbsent','Қатыспағандар саны','number',''],['qResearch','Зерттеу сұрағы (қажет болса)','text','','Сұрақты жазыңыз немесе сызықша қойыңыз'],
+ ['qObjectives','Оқу мақсаттарының кодтары және толық мәтіні *','textarea','','Оқу бағдарламасынан дәл көшіріңіз. Бірнеше мақсатты жеке жолға жазыңыз.'],
+ ['qDuration','Сабақ ұзақтығы, минут','number','45'],['qValues','Құндылықтар','textarea','','Құндылық атауы және оны қандай әрекет арқылы іске асыру қажет']]],
+ ['Сабақ бағыты және жұмыс формалары',[
+ ['qMode','Сабақтың ұйымдастырылуы','select','Аралас жұмыс формалары',['Аралас жұмыс формалары','Жеке зерттеу → бірлескен тексеру','Толығымен жеке жұмыс','Практикалық сабақ','Өзім белгілеймін']],
+ ['qOwnMode','Өз ұйымдастыру тәртібіңіз','textarea','','Мысалы: тек жұптық зерттеу, соңында жеке қорытынды'],
+ ['qMap','Картамен жұмыс міндетті','checkbox',false],['qImage','Сурет / өнер туындысын талдау міндетті','checkbox',false],
+ ['qInstructions','Ерекше нұсқаулар','textarea','','Сабаққа тән міндетті шарттарды жазыңыз. Ұйымдастыру режимін жоғарыдан таңдаңыз.']]],
+ ['Сабақ кезеңдері және ойлау дағдылары',[
+ ['qStart','Сабақтың басы, минут','number','7'],['qMiddle','Сабақтың ортасы, минут','number','30'],['qEnd','Сабақтың соңы, минут','number','8'],
+ ['qIntroMethod','Кіріспе әдісі','select','Оқу мақсатына сай таңда',['Оқу мақсатына сай таңда','Миға шабуыл','Суреттен таны','Кім? Не? Қашан?','Ашық және жабық сұрақтар','Ақиқат / Жалған']],
+ ['qMainTasks','Негізгі бөлімдегі тапсырмалар саны','number','3'],
+ ['qMainMethods','Негізгі бөлімге қажетті әдістер (міндетті емес)','textarea','','Мысалы: дерек талдау, салыстыру, себеп-салдар, PEST талдау'],
+ ['qConsolidation','Бекіту әдісі','select','Оқу мақсатына сай таңда',['Оқу мақсатына сай таңда','Сәйкестендіру','Ақиқат / Жалған','Қысқа сұрақ-жауап','Терминдерді анықтау','Шығу билеті']]]],
+ ['Бағалау, қолдау және рефлексия',[
+
+ ['qDifferentiation','Саралау және қолдау (қажет болса)','textarea','','Мысалы: тірек сөздер, қадамдық нұсқаулық, қабілетті оқушыға қосымша дәлел талдау'],
+ ['qReflection','Рефлексия әдісі','select','Плюс–Минус–Қызықты',['Плюс–Минус–Қызықты','Екі жұлдыз, бір тілек','Табыс сатысы','Блоб ағашы','Еттартқыш. Чемодан. Сүзгі','Бағдаршам','Эко-рефлексия: Сұрыптау, Қайта өңдеу, Обал','Өз әдісім']],
+ ['qOwnReflection','Өз рефлексия әдісіңіз және өткізу тәртібі','textarea','','«Өз әдісім» таңдалса, әдісті осында жазыңыз']]],
+ ['Дереккөздер және ресурстар',[
+ ['qTextbook','Оқулық: авторы, баспасы, жылы, параграфы, беттері','textarea','','Белгілі мәліметтерді ғана енгізіңіз'],
+ ['qSource','Тірек мәтін / дерек үзіндісі','textarea','','Тапсырмалар негізделетін оқулық мәтінін осында енгізуге болады'],
+ ['qAssets','Карталар, суреттер, таратпалар атаулары','textarea','','Мысалы: «XX ғасырдың басындағы Қазақстан» картасы; Алаш қайраткерлерінің портреттері'],
+ ['qLinks','Видео, фильм, платформа, құжат сілтемелері','textarea','','Материалдың атауы — URL — қолданылатын үзінді немесе уақыт аралығы'],
+ ['qSuggestMedia','Қажет болса, қосымша фильм, платформа немесе құжат ұсыну','checkbox',true]]]
+];
+const QMJ_FIELDS=QMJ_SECTIONS.flatMap(x=>x[1]);
+function initQmj(){const box=$('qmjPanel');box.replaceChildren();const intro=document.createElement('p');intro.className='note';intro.textContent='Сіз ұсынған ҚМЖ талаптары промптқа автоматты қосылады: SMART мақсат, Блум деңгейлері, дескрипторлар және 5 бағандық сабақ барысы.';box.append(intro);QMJ_SECTIONS.forEach(([title,rows],sectionIndex)=>{const group=document.createElement('fieldset');group.className='toolParamGroup';const legend=document.createElement('legend');legend.textContent=(sectionIndex+1)+'. '+title;group.append(legend);rows.forEach(([id,label,type,value,hint])=>{const lab=document.createElement('label');lab.htmlFor=id;lab.textContent=label;let el;if(type==='textarea'){el=document.createElement('textarea');el.rows=3}else if(type==='select'){el=document.createElement('select');hint.forEach(x=>el.append(option(x,x)))}else{el=document.createElement('input');el.type=type;if(type==='number'){el.min=['qPresent','qAbsent'].includes(id)?'0':'1';el.step='1'}}el.id=id;if(type==='checkbox')el.checked=value;else el.value=value;if(typeof hint==='string')el.placeholder=hint;el.addEventListener(type==='checkbox'||type==='select'?'change':'input',()=>{syncQmj();updateTeacherPrompt()});if(type==='checkbox'){lab.className='qmjCheck';lab.prepend(el);group.append(lab)}else group.append(lab,el)});box.append(group)});const help=document.createElement('p');help.className='note';help.textContent='Скриншот пен файлды қолданатын болсаңыз, дайын промптпен бірге ЖИ чатына тіркеңіз. Генератор файлдарды өзі оқымайды.';box.append(help);syncQmj()}
+function q(id){return safe($(id).value)}
+function syncQmj(){for(const [id,show] of [['qOwnMode',q('qMode')==='Өзім белгілеймін'],['qOwnReflection',q('qReflection')==='Өз әдісім']]){$(id).hidden=!show;document.querySelector('label[for="'+id+'"]').hidden=!show}}
+function resetQmj(){QMJ_FIELDS.forEach(([id,,type,value])=>{if(type==='checkbox')$(id).checked=value;else $(id).value=value});syncQmj()}
+function checkTiming(){const ids=['qDuration','qStart','qMiddle','qEnd','qMainTasks'];const valid=ids.every(id=>/^\d+$/.test(q(id))&&Number(q(id))>0);const sum=Number(q('qStart'))+Number(q('qMiddle'))+Number(q('qEnd'));const ok=valid&&sum===Number(q('qDuration'));$('teacherMessage').textContent=ok?'Уақыт үйлеседі: '+q('qStart')+' + '+q('qMiddle')+' + '+q('qEnd')+' = '+q('qDuration')+' минут.':'Уақыт пен тапсырма санын тексеріңіз: оң бүтін сандар енгізіңіз; үш кезеңнің қосындысы сабақ ұзақтығына тең болсын.';$('teacherMessage').classList.toggle('err',!ok);return ok}
+function readyTeacher(){if(PED_MODELS[teacherTool]){const nums=[...$('teacherParams').querySelectorAll('input[type=number]')];if(nums.some(x=>!/^\d+$/.test(x.value))){$('teacherMessage').textContent='Сандарды теріс емес бүтін санмен енгізіңіз.';return false}if(nums.some(x=>Number(x.value)===0&&!/тапсырма саны|анықтау саны|Сәйкестендіру саны/.test(PED_MODELS[teacherTool].fields[Number(x.id.slice(2))][0]))){$('teacherMessage').textContent='Уақыт, балл және сөз саны нөлден үлкен болсын.';return false}if(teacherTool.includes('— тест')&&nums.reduce((a,x)=>a+Number(x.value),0)===0){$('teacherMessage').textContent='Кемінде бір тапсырма таңдаңыз.';return false}if(teacherTool==='ТЖБ'&&(!(Number($('tp5').value)>0)||Number($('tp5').value)%10!==0))return false;return true}if(teacherTool!=='ҚМЖ конструкторы')return true;if(!checkTiming())return false;if(q('qMode')==='Өзім белгілеймін'&&!q('qOwnMode')){$('teacherMessage').textContent='Өз ұйымдастыру тәртібіңізді жазыңыз.';$('qOwnMode').focus();return false}if(q('qReflection')==='Өз әдісім'&&!q('qOwnReflection')){$('teacherMessage').textContent='Рефлексия әдісін жазыңыз.';$('qOwnReflection').focus();return false}return true}
+function qmjPrompt(){const mode=q('qMode');const forms=mode==='Толығымен жеке жұмыс'?'Барлық тапсырма және бекіту жеке орындалсын. Топтық, жұптық және ұжымдық орындауды міндеттеме. Қалыптастырушы бағалауда тек өзін-өзі бағалау мен мұғалімнің кері байланысын қолдан; енгізілген жұптық/топтық бағалау ұсынысын осы режимге бейімде.':mode==='Жеке зерттеу → бірлескен тексеру'?'Барлық тапсырма алдымен жеке орындалсын. Тек тексеру мен талқылауда жұптық, топтық және ұжымдық формаларды логикалық ретпен қолдан. Бірлескен талқылау жеке зерттеуді алмастырмасын.':mode==='Өзім белгілеймін'?('Жұмыс формаларын дәл мына тәртіппен ұйымдастыр: '+(q('qOwnMode')||'[ұйымдастыру тәртібін енгізіңіз]')+'. Өзге жұмыс формаларын міндеттеп қоспа.'):mode==='Практикалық сабақ'?'Сабақтың негізгі бөлігі нақты практикалық әрекеттерге арналсын. Жеке, жұптық, топтық және ұжымдық жұмысты практикалық міндетке сай логикалық ретпен байланыстыр.':'Негізгі бөлімде ұжымдық, топтық, жұптық және жеке жұмыс түрлері міндетті түрде кезектесіп, логикалық байланыста қолданылсын. Бір тапсырма ішінде де орындау және талқылау кезеңдерін бөлуге болады.';
+const ref=q('qReflection')==='Өз әдісім'?(q('qOwnReflection')||'[әдісті енгізіңіз]'):q('qReflection');
+return `Сен — Қазақстанның жаңартылған білім беру мазмұнын терең меңгерген, тәжірибелі әрі жоғары санатты мұғалім-әдіскерсің.
+Төмендегі ақпарат негізінде ҚР Оқу-ағарту министрлігінің 130-бұйрығына сәйкес Қысқа мерзімді сабақ жоспарын (ҚМЖ) құрастыр. Пайдаланушы сұраған кестелік құрылымды толық сақта. Егер ресми үлгі қоса берілсе, соған сүйен; тексерілмеген нормативтік талаптарды ойдан қоспа.
+
+САБАҚТЫҢ БАЗАЛЫҚ АҚПАРАТЫ:
+- Пән: ${safe($('tSubject').value)||'[пәнді енгізіңіз]'}
+- Бөлім: ${q('qSection')||'[бөлімді толтыруға орын қалдыр]'}
+- Педагогтің Т.А.Ө.: ${q('qTeacher')||'[толтыруға орын қалдыр]'}
+- Күні: ${q('qDate')||'[толтыруға орын қалдыр]'}
+- Сынып: ${safe($('tAudience').value)||'[сыныпты енгізіңіз]'}
+- Қатысушылар саны: ${q('qPresent')||'[толтыруға орын қалдыр]'}
+- Қатыспағандар саны: ${q('qAbsent')||'[толтыруға орын қалдыр]'}
+- Сабақ тақырыбы: ${safe($('tTopic').value)||'[тақырыпты енгізіңіз]'}
+- Зерттеу сұрағы: ${q('qResearch')||'—'}
+- Оқу мақсаттары (кодтары және толық мәтіні):
+${q('qObjectives')||'[оқу мақсаттарының кодтары мен мәтінін сұрат; ойдан шығарма]'}
+- Сабақ ұзақтығы: ${q('qDuration')} минут.
+- Құндылықтар: ${q('qValues')||'Тақырыпқа үйлесімді құндылықты таңдап, нақты оқу әрекетімен байланыстыр.'}
+${safe($('tGoal').value)?'- Қосымша педагогикалық мақсат: '+safe($('tGoal').value):''}
+
+ЕРЕКШЕ НҰСҚАУЛАР:
+- Сабақ форматы: ${mode}.
+- ${forms}
+- ${q('qInstructions')||'Қосымша ерекше нұсқау жоқ.'}
+${$('qMap').checked?'- Картамен жұмыс міндетті. Нақты карта атауын тапсырмада және ресурстар бағанында көрсет. Карта берілмесе, қажетті карта атауын ұсынып, мұғалім дайындайтын ресурс деп белгіле.':''}
+${$('qImage').checked?'- Тарихи сурет немесе өнер туындысын талдау міндетті. Нақты нысанның атауын ресурстарда көрсет; сурет берілмесе оның мазмұнын ойдан сипаттама.':''}
+- Ресурстарға тапсырмаға сәйкес материалдардың атауы жазылсын, скриншот нөмірі немесе «1-сурет» деген жалпылама белгі емес.
+- Егер ерекше нұсқау таңдалған сабақ режиміне қайшы болса, қайшылықты жасырма: оны қысқа көрсетіп, нақтылау сұра. Қайшы талаптарды бір жоспарға қатар енгізбе.
+
+ҚМЖ-ҒА ҚОЙЫЛАТЫН ҚАТАҢ ТАЛАПТАР:
+1. Құрылым: алдымен «Бөлім», «Педагогтің Т.А.Ө.», «Күні», «Сынып», қатысу деректері, «Сабақ тақырыбы», «Оқу мақсаттары», «Сабақ мақсаты», «Құндылықтар» жолдары бар кесте бер. Одан кейін «Сабақ барысы» кестесін жаса.
+2. Сабақ мақсаты оқу мақсаттарына тура сәйкес SMART форматта жазылсын: нақты, өлшемді, қолжетімді, шынайы және сабақ уақытымен шектелген. «Талдайды», «анықтайды», «жіктейді», «салыстырады», «дәлелдейді» сияқты әрекет етістіктерін қолдан. Нәтижені қандай әрекет және қандай өлшем арқылы бағалайтыныңды көрсет. Оқу мақсатының кодын немесе мәтінін өзгертпе.
+3. Ойлау дағдылары:
+   • Сабақтың басы — ${q('qStart')} минут: білу, түсіну деңгейіндегі қысқа қызығушылық ояту тапсырмасы. Әдіс: ${q('qIntroMethod')}.
+   • Сабақтың ортасы — ${q('qMiddle')} минут: оқу мақсаттарына сай талдау, жинақтау/жасау және бағалауға бағытталған ${q('qMainTasks')} негізгі тапсырма. Сыни ойлау, дерекке сүйену, себеп-салдар және негізделген қорытынды қамтылсын. Қажетті әдістер: ${q('qMainMethods')||'тақырып пен оқу мақсаттарына сай таңда'}.
+   • Сабақтың соңы — ${q('qEnd')} минут: білу, түсіну деңгейіндегі қарапайым бекіту, содан кейін рефлексия. Бекіту әдісі: ${q('qConsolidation')}. Рефлексия уақыты осы кезеңге кіреді.
+   • Әр тапсырманың ойлау деңгейін ата. Барлық ішкі кезеңнің уақыт қосындысы ${q('qDuration')} минуттан аспай, жоспардың жалпы ұзақтығына дәл тең болсын. Негізгі тапсырмалардың уақытын негізгі бөлімнің ішінде бөл.
+4. Жұмыс формалары: ${forms}
+5. Әр тапсырмада оқушыға берілетін нақты нұсқаулық, күтілетін әрекет, бақыланатын қадамдық дескрипторлар және қалыптастырушы бағалау тәсілі көрсетілсін. Бағалау тәсілдері: ${mode==='Толығымен жеке жұмыс'?'Өзін-өзі бағалау; мұғалімнің мадақтауы және нақты кері байланысы':'Тапсырмаға сай бағалау критерийін, қадамдық дескрипторды және қалыптастырушы бағалау тәсілін өзің жаса'||'таңдалған жұмыс формасына сай өзін-өзі бағалау, жұптық бағалау немесе мұғалімнің нақты кері байланысын таңда'}. Жұмыс форматына қайшы тәсілді қолданба. «Жақсы орындады» сияқты өлшемсіз дескриптор жазба. Ұпай қолданылса, дескрипторлар мен жалпы балл өзара сәйкес болсын.
+6. Рефлексия: «${ref}». Әдіс атауымен шектелмей, оқушы не жазады/таңдайды/айтады және мұғалім кері байланысты қалай қолданады — қысқа көрсет.
+7. Ресурстар: әр тапсырмаға сай оқулық беті, кескін карта, тарихи сурет, таратпа материал, құжат немесе сілтеме нақты жазылсын. Карта/сурет қолданылған әр тапсырманың ресурстар бағанында оның атауы міндетті түрде көрсетілсін. Бет нөмірі, автор, дәйексөз, фильм атауы және URL ойдан шығарылмасын. Белгісіз мәліметті «мұғалім нақтылайды» деп белгіле.
+${$('qSuggestMedia').checked?'   Қажет болса деректі/көркем фильм, білім беру платформасы немесе құжат ұсын. Тексеру мүмкін болса, материалға тікелей жұмыс істейтін сілтеме бер. Тексеру мүмкін болмаса, URL ойдан жасама: атауын және «сілтемесін мұғалім нақтылайды» белгісін бер. Көркем фильмдегі көрініс пен тарихи фактіні ажырат.':'   Қосымша фильмдер мен платформаларды өздігінен қоспа; берілген ресурстарды қолдан.'}
+${q('qDifferentiation')?'8. Саралау және қолдау: '+q('qDifferentiation')+'. Қолдауды нақты тапсырмаға кіріктір.':''}
+
+ДЕРЕККӨЗДЕР МЕН БЕРІЛГЕН МАТЕРИАЛДАР:
+Оқулық: ${q('qTextbook')||'Нақты басылым/беттер көрсетілмеген; ойдан қоспа.'}
+Тірек мәтін / дерек үзіндісі:
+${q('qSource')||'Мәтін бұл өріске енгізілмеген. Чатқа тіркелген материал болса, соны пайдалан. Негізгі дерек жетіспесе, сұрат.'}
+Карталар, суреттер, таратпалар: ${q('qAssets')||'Атаулары көрсетілмеген.'}
+Видео, фильм, платформа, құжат сілтемелері:
+${q('qLinks')||'Сілтемелер берілмеген.'}
+Берілген материалдағы фактілер мен тұжырымдарды бұрмалама. Скриншотты оқулықтағы тақырыптық мазмұны арқылы ата. Көрінбейтін мәтінді, сурет мазмұнын немесе бет нөмірін ойдан толықтырма.
+
+НӘТИЖЕ ФОРМАТЫ:
+Сабақ барысы дәл 5 бағаннан тұрсын:
+| Сабақ кезеңі/уақыты | Педагогтің әрекеті | Оқушының әрекеті | Бағалау | Ресурстар |
+Мәтін артық суреттемелерсіз, нақты, кәсіби педагогикалық тілде жазылсын. Әр тапсырма жеке жолда берілсін; ұзақ абзацтардың орнына қысқа нөмірленген әрекеттер қолдан. Нұсқаулық, дескриптор және ресурстар өзара сәйкес болсын.
+${$('tKazakh').checked?'Барлық мәтін қазақ тілінде, грамматикалық және стилистикалық қатесіз болсын.':''}
+${$('tVerify').checked?'Дайын ҚМЖ-ны берер алдында оқу мақсаты → сабақ мақсаты → тапсырма → дескриптор сәйкестігін, уақыт қосындысын, жұмыс формаларын және ресурс атауларын тексер.':''}
+${$('tPrivacy').checked?'Жеке және құпия мәліметтерді қажетсіз жариялама және бөгде сервистерге жіберме.':''}
+ҚОСЫМША ТАЛАПТАР:
+${safe($('tExtra').value)||'Қосымша талап жоқ.'}`;
+}
+const TEACHER_STATE_KEY='ai-prompt-lab-teacher-v1';
+function saveTeacher(){if(teacherRestoring)return;try{captureTeacherParams();const fields={};['tSubject','tAudience','tTopic','tGoal','tExtra','tStructured','tVerify','tKazakh','tPrivacy',...QMJ_FIELDS.map(x=>x[0])].forEach(id=>{const el=$(id);if(el)fields[id]=el.type==='checkbox'?el.checked:el.value});localStorage.setItem(TEACHER_STATE_KEY,JSON.stringify({fields,teacherDirection,teacherTool,teacherDrafts}))}catch{}}
+function restoreTeacher(){teacherRestoring=true;try{const state=JSON.parse(localStorage.getItem(TEACHER_STATE_KEY)||'null');if(!state)return;teacherDirection=state.teacherDirection==='digital'?'digital':'pedagogical';setTeacherDirection(teacherDirection);teacherTool=TEACHER_TOOLS[teacherDirection].includes(state.teacherTool)?state.teacherTool:'';teacherDrafts=state.teacherDrafts||{};Object.entries(state.fields||{}).forEach(([id,v])=>{const el=$(id);if(el){if(el.type==='checkbox')el.checked=!!v;else el.value=v}});syncQmj()}catch{}finally{teacherRestoring=false}}
+function teacherToolParams(tool){
+ return TPARAMS[tool] || (teacherDirection==='digital'
+  ? ['Негізгі функциялар','Пайдаланушы әрекеті','Нәтиже/шығыс форматы','Техникалық талаптар']
+  : ['Көлемі','Құрылымы','Бағалау/сапа критерийі','Нәтиже форматы']);
+}
+function renderTeacherTools(){
+ const q=$('teacherSearch').value.trim().toLocaleLowerCase('kk');
+ const box=$('teacherToolGrid');box.replaceChildren();
+ TEACHER_TOOLS[teacherDirection].filter(x=>x.toLocaleLowerCase('kk').includes(q)).forEach(name=>{
+   const b=document.createElement('button');b.type='button';b.className='teacherTool'+(teacherTool===name?' active':'');b.textContent=name;
+   b.onclick=()=>{captureTeacherParams();teacherTool=name;renderTeacherTools();renderTeacherParams();updateTeacherPrompt();};box.append(b);
+ });
+}
+function captureTeacherParams(){if(teacherTool&&teacherTool!=='ҚМЖ конструкторы')teacherDrafts[teacherTool]=[...$('teacherParams').querySelectorAll('input,textarea,select')].map(x=>x.value)}
+function renderTeacherParams(){
+ const qmj=teacherTool==='ҚМЖ конструкторы';$('qmjPanel').hidden=!qmj;$('teacherParams').hidden=qmj;
+ $('tGoalLabel').textContent=qmj?'Қосымша педагогикалық мақсат (міндетті емес)':'Мақсат';
+ $('tGoal').placeholder=qmj?'Оқу мақсаттарының коды мен мәтіні төмендегі ҚМЖ бөлімінде толтырылады.':'Нәтижесінде не алынуы керек?';
+ const box=$('teacherParams');box.replaceChildren();if(qmj)return;
+ if(PED_MODELS[teacherTool]){PED_MODELS[teacherTool].fields.forEach(([label,value,type,options],i)=>{const lab=document.createElement('label');lab.textContent=label;lab.htmlFor='tp'+i;const inp=document.createElement(type==='textarea'?'textarea':type==='select'?'select':'input');inp.id='tp'+i;if(type==='select')options.forEach(v=>inp.append(option(v,v)));else if(type==='textarea')inp.rows=4;else {inp.type=type;if(type==='number'){inp.min='0';inp.step='1'}}inp.value=teacherDrafts[teacherTool]?.[i]??value;inp.addEventListener(type==='select'?'change':'input',updateTeacherPrompt);box.append(lab,inp)});return}
+ if(!teacherTool){box.innerHTML='<span class="note">Алдымен құралды таңдаңыз.</span>';return}
+ teacherToolParams(teacherTool).forEach((p,i)=>{
+   const lab=document.createElement('label');lab.textContent=p;
+   const inp=document.createElement('input');inp.id='tp'+i;lab.htmlFor=inp.id;inp.value=teacherDrafts[teacherTool]?.[i]||'';inp.placeholder=p+' — енгізіңіз';inp.addEventListener('input',updateTeacherPrompt);
+   box.append(lab,inp);
+ });
+}
+function setTeacherDirection(dir){
+ captureTeacherParams();teacherDirection=dir;teacherTool='';
+ $('pedTab').classList.toggle('active',dir==='pedagogical');$('digitalTab').classList.toggle('active',dir==='digital');
+ $('teacherDirectionTitle').textContent=dir==='pedagogical'?'Педагогикалық жұмыс':'Цифрлық өнім және автоматтандыру';
+ $('teacherDirectionDesc').textContent=dir==='pedagogical'
+ ?'Сабақ жоспарлау, бағалау, саралау, әдістемелік және зерттеу міндеттеріне арналған құрылымды промпттар.'
+ :'Сайт, HTML құрал, Telegram бот, AI чат-бот, AI агент және мұғалімнің цифрлық жұмысын автоматтандыруға арналған промпттар.';
+ $('teacherSearch').value='';renderTeacherTools();renderTeacherParams();updateTeacherPrompt();
+}
+function updateTeacherPrompt(){
+ saveTeacher();if(teacherTool==='ҚМЖ конструкторы'){$('teacherPreview').textContent=qmjPrompt();checkTiming();return}
+ $('teacherMessage').textContent='';$('teacherMessage').classList.remove('err');
+ if(PED_MODELS[teacherTool]){$('teacherPreview').textContent=pedagogicalPrompt();if(teacherTool==='ТЖБ'){const n=Number($('tp5').value);$('teacherMessage').textContent=n>0&&n%10===0?'Балл үлестері: '+n*.3+' / '+n*.5+' / '+n*.2:'Жалпы балл 30/50/20 үлестеріне бүтін бөлінуі үшін 10-ға еселі сан енгізіңіз.'}return}
+ const vals=teacherTool?teacherToolParams(teacherTool).map((p,i)=>`- ${p}: ${safe(($('tp'+i)||{}).value)||'нақтылаңыз'}`).join('\n'):'- Құрал таңдалмаған';
+ const quality=[
+  $('tStructured').checked?'Құрылымды және логикалық нәтиже бер.':'',
+  $('tVerify').checked?'Нәтижені бермес бұрын ішкі сәйкестігін тексер.':'',
+  $('tKazakh').checked?'Негізгі мәтін мен интерфейс қазақ тілінде болсын.':'',
+  $('tPrivacy').checked?'Жеке және құпия деректерді сыртқы серверге жіберме.':''
+ ].filter(Boolean).map(x=>'- '+x).join('\n');
+ $('teacherPreview').textContent=`Сен тәжірибелі педагогикалық дизайнер, промпт-инженер және ${teacherDirection==='digital'?'цифрлық өнім әзірлеушісің':'мұғалім-әдіскерсің'}.
+
+ТАПСЫРМА:
+${safe($('tSubject').value)||'[пән/бағыт]'} бойынша «${safe($('tTopic').value)||'[міндет]'}» тақырыбында ${teacherTool||'[құралды таңдаңыз]'} жаса.
+
+АУДИТОРИЯ:
+${safe($('tAudience').value)||'[аудитория]'}
+
+МАҚСАТ:
+${safe($('tGoal').value)||'[мақсатты енгізіңіз]'}
+
+ҚҰРАЛҒА ТӘН ПАРАМЕТРЛЕР:
+${vals}
+
+САПА ЖӘНЕ ҚАУІПСІЗДІК:
+${quality||'- Қосымша талап таңдалмаған'}
+
+ҚОСЫМША ТАЛАПТАР:
+${safe($('tExtra').value)||'Қосымша талап жоқ.'}
+
+НӘТИЖЕ:
+Толық, қолдануға дайын нәтиже бер. Қажетті ақпарат жетіспесе, оны ойдан қоспай нақтылауды сұра.`;
+}
+function switchMode(mode){
+ const classroom=mode==='classroom';
+ $('classroomMode').classList.toggle('active',classroom);$('teacherMode').classList.toggle('active',!classroom);
+ $('classroomWorkspace').classList.toggle('modeHidden',!classroom);$('teacherWorkspace').classList.toggle('modeHidden',classroom);
+ document.querySelector('.workspaceHead h2').textContent=classroom?'Prompt Workspace':'Teacher Workspace';
+ document.querySelector('.workspaceHead p').textContent=classroom?'Параметрлерді өзгертіңіз — құрылымды промпт бірден жаңарады.':'Педагогикалық немесе цифрлық кәсіби міндетті таңдаңыз — промпт автоматты құрастырылады.';
+}
+$('classroomMode').onclick=()=>switchMode('classroom');$('teacherMode').onclick=()=>switchMode('teacher');
+$('pedTab').onclick=()=>setTeacherDirection('pedagogical');$('digitalTab').onclick=()=>setTeacherDirection('digital');
+$('teacherSearch').addEventListener('input',renderTeacherTools);
+['tSubject','tAudience','tTopic','tGoal','tExtra','tStructured','tVerify','tKazakh','tPrivacy'].forEach(id=>$(id).addEventListener('input',updateTeacherPrompt));
+$('teacherGenerate').onclick=updateTeacherPrompt;
+$('teacherClear').onclick=()=>{if(!confirm('Мұғалім бөліміндегі енгізілген мәліметтерді тазалаймыз ба?'))return;teacherRestoring=true;['tSubject','tAudience','tTopic','tGoal','tExtra'].forEach(id=>$(id).value='');teacherDrafts={};teacherTool='';resetQmj();teacherRestoring=false;renderTeacherTools();renderTeacherParams();updateTeacherPrompt()};
+$('teacherCopy').onclick=async()=>{updateTeacherPrompt();if(!readyTeacher())return;const text=$('teacherPreview').textContent;try{await navigator.clipboard.writeText(text);$('teacherMessage').textContent='Промпт көшірілді.'}catch(e){const t=document.createElement('textarea');t.value=text;document.body.append(t);t.select();try{if(!document.execCommand('copy'))throw Error();$('teacherMessage').textContent='Промпт көшірілді.'}catch{$('teacherMessage').textContent='Автоматты көшіру мүмкін болмады. Промптты оң жақтан қолмен көшіріңіз.'}t.remove()}};
+$('teacherSave').onclick=()=>{updateTeacherPrompt();if(!readyTeacher())return;const url=URL.createObjectURL(new Blob([$('teacherPreview').textContent],{type:'text/markdown;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download=teacherTool==='ҚМЖ конструкторы'?'QMJ_prompt.md':'teacher_prompt.md';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);$('teacherMessage').textContent='Промпт файлы жүктелді.'};
+const VISUAL_MODELS={"Карточкалар постері": [["Жалпы карточка саны", "12"], ["Тор (баған × жол)", "Автоматты"], ["Мұқаба саны", "1"], ["Нұсқаулық саны", "1"], ["Тіркеу парағы саны", "0"], ["Бос орын әрекеті", "Бос қалдыру"], ["Пішім", "А3, көлденең"], ["Режим", "Постер / қиып тарататын карточкалар"], ["Тапсырмалар / бастапқы мәтін", "Өз тапсырмаларыңызды енгізіңіз"], ["Стиль", "Академиялық / Pixar 3D / балалар оқулығы"]], "Визуалды дидактикалық карточка": [["Карточка саны", "1"], ["Тапсырма саны", "3"], ["Карточка түрі", "А/В/С деңгейлік"], ["Пішім", "А4, тік"], ["Мәтін / тапсырмалар", "Бастапқы материалды енгізіңіз"], ["Стиль", "Академиялық / 3D мультфильм"]], "Ақпараттық постер": [["Ақпарат блогының саны", "6"], ["Пішім", "А3 / А2 баспа немесе 9:16 экран"], ["Бастапқы мәтін", "Материалды енгізіңіз"], ["Визуалдар", "Тақырыптық орталық нысан, сызба, мысалдар"], ["Стиль", "Pixar 3D / балалар оқулығы / академиялық"]], "Жаттығу карточкасы": [["Жаттығу саны", "6"], ["Пішім", "А4, тік"], ["Бастапқы мәтін / есептер", "Материалды енгізіңіз"], ["Стиль", "3D мультфильм / академиялық"]], "Алгоритмдік карточка": [["Қадам саны", "5"], ["Пішім", "А4, тік"], ["Тапсырма / алгоритм", "Материалды енгізіңіз"], ["Стиль", "Балалар оқулығы / академиялық"]]};
+for(const name of Object.keys(VISUAL_MODELS)){if(!CATALOG.some(x=>x.name===name))CATALOG.push({category:'Карточкалар және постерлер',name})}groups.push('Карточкалар және постерлер');
+const oldTypeConfig=typeConfig;typeConfig=function(name){return VISUAL_MODELS[name]||oldTypeConfig(name)};
+const oldPromptText=promptText;
+function isPaper(name){return !!VISUAL_MODELS[name]||/постер|плакат/i.test(name)}
+function paperPrompt(names){const params=names.map(name=>{const defs=typeConfig(name);const values=defs.map((f,i)=>{const el=[...$('conditional').querySelectorAll('input')].find(x=>x.dataset.tool===name&&Number(x.dataset.index)===i);return safe(el?.value)||f[1]});let details=defs.map((f,i)=>f[0]+': '+values[i]).join('\n');if(name==='Карточкалар постері'){const n=Number(values[0]),extras=Number(values[2])+Number(values[3])+Number(values[4]);details+=`\nЖалпы ${n} карточка. Мұқаба, нұсқаулық және тіркеу парағы осы санға кіреді. Тапсырма карточкалары: ${n-extras}. Тор автоматты болса, санға сай таңда: 6 → 3×2; 10 → 5×2; 12 → 4×3; 15 → 5×3. Құрам мен тор сыйымдылығын тексер. Сәйкессіздік болса нақтыла; бос ұяшыққа материалды рұқсатсыз қоспа.`}return name+'\n'+details}).join('\n\n');return `Сен — креативті педагогикалық дизайнер және әдіскерсің. Қағазға басып шығаруға арналған дайын материал жаса.
+Пән: ${safe($('subject').value)||'[пән]'}
+Тақырып: ${safe($('topic').value)||'[тақырып]'}
+Сынып/жас: ${safe($('audience').value)||'[сынып]'}
+Оқу мақсаты: ${safe($('goal').value)||'[оқу мақсаты]'}
+Деңгей: ${$('difficulty').value}. Ойлау дағдысы: ${$('bloom').value}.
+Тіл: ${$('language').value}.
+
+МАТЕРИАЛ ҚҰРАМЫ:
+${params}
+
+ДИЗАЙН:
+Стиль: ${safe($('customStyle').value)||$('style').value}. Палитра: ${safe($('customPalette').value)||$('palette').value}.
+Фон: ${$('visualBg').value}. Иллюстрация: ${$('visualIllustration').value}. Әр құралдың жеке стиль талабын ескер.
+3D мультфильм стилі таңдалса: көлемді достық кейіпкерлер, жарқын түстер, жұмсақ жарық. Балалар оқулығы стилінде: қарапайым суреттер, үлкен қаріп, түрлі-түсті жиектемелер. Академиялық стильде: сабырлы түстер мен анық құрылым.
+
+ҚАҒАЗ МАТЕРИАЛЫНА ҚОЙЫЛАТЫН ТАЛАПТАР:
+Жоғарыда тақырып пен пән белгісі; ортада мағыналы визуал; төменде ақпарат немесе тапсырма блоктары. Әр тапсырма карточкасында нөмір, нақты тапсырма және қолмен жауап жазатын жеткілікті орын болсын. Оқушы аты-жөніне орын бер. Ақпараттық постерде тақырып → ұғымдар → мысалдар реті сақталсын. Жаттығу карточкасында нақты практикалық тапсырмалар, алгоритмдік карточкада нөмірленген орындалатын қадамдар бер.
+Нақты қағаз өлшемін, жиектерін, қиып алуға арналған аралықтарды сақта. Мәтін анық, оқуға қолайлы болсын; сыймаса ұсақтатпай бірнеше бетке бөл. 9:16 пропорциясын А3/А2 қағазымен теңестірме; қағаз пішімі басым. Барлық мәтін сауатты, жас ерекшелігіне сай, дизайн біркелкі болсын. Деректер мен карталарды ойдан жасама. Дайын тапсырмалар берілсе сақта, әйтпесе бастапқы мәтін мен оқу мақсатына сүйен. Тапсырмалы материалға мұғалімнің жауап кілтін бөлек бетте бер.
+Қосымша талаптар: ${safe($('extra').value)||'—'}
+
+НӘТИЖЕ:
+Қағазға арналған толық дайын мазмұн мен безендірілген макет бер. Мүмкіндік болса, баспаға дайын PDF немесе жоғары сапалы сурет жаса; ондай мүмкіндік болмаса, дайын мәтін мен нақты орналасу сипаттамасын бер. Бағдарламалау коды қажет емес.`}
+promptText=function(){const paper=chosenTools.filter(isPaper),digital=chosenTools.filter(x=>!isPaper(x));if(!paper.length)return oldPromptText();if(!digital.length)return paperPrompt(paper);const original=chosenTools;let digitalText;try{chosenTools=digital;digitalText=oldPromptText().split('\n').filter(line=>!paper.some(name=>line.startsWith('- '+name+' / '))).join('\n')}finally{chosenTools=original}return 'ЕКІ БӨЛЕК НӘТИЖЕ ДАЙЫНДА. Бірінші бөлімдегі функциялар тек цифрлық құралдарға қатысты. Екінші бөлім — қағазға арналған жеке материал.\n\n1. ЦИФРЛЫҚ ҚҰРАЛДАР\n'+digitalText+'\n\n2. ҚАҒАЗ МАТЕРИАЛДАРЫ\n'+paperPrompt(paper)};
+const oldUpdate=update;update=function(){const onlyPaper=chosenTools.length>0&&chosenTools.every(isPaper);$('features').hidden=onlyPaper;$('offline').closest('.checks').hidden=onlyPaper;$('visualMotion').parentElement.hidden=onlyPaper;const title=$('features').parentElement.querySelector('h2');title.textContent=onlyPaper?'03 Материал параметрлері':'03 Функциялар және параметрлер';oldUpdate()};
+initQmj();restoreTeacher();
+renderTeacherTools();renderTeacherParams();updateTeacherPrompt();
+fillCategories();featureNames.forEach((name,i)=>{const label=document.createElement('label');const inp=document.createElement('input');inp.type='checkbox';inp.value=name;inp.checked=[1,2,7].includes(i);inp.addEventListener('change',update);label.append(inp,document.createTextNode(name));$('features').append(label)});fillTools();restore();fields.forEach(id=>$(id).addEventListener($(id).tagName==='SELECT'||$(id).type==='checkbox'?'change':'input',()=>{if(id==='category'||id==='toolSearch')fillTools();if(['tool','customTool','category','toolSearch'].includes(id))renderConditional();update()}));$('generate').addEventListener('click',()=>{update();valid()});$('copy').addEventListener('click',async()=>{if(!valid())return;try{await navigator.clipboard.writeText(promptText());$('message').textContent='Промпт көшірілді.'}catch(e){const t=document.createElement('textarea');t.value=promptText();document.body.append(t);t.select();try{if(!document.execCommand('copy'))throw Error('copy failed');$('message').textContent='Промпт көшірілді.'}catch(err){$('message').textContent='Автоматты көшіру мүмкін болмады. Оң жақтағы мәтінді қолмен таңдаңыз.'}t.remove()}});$('download').addEventListener('click',download);$('reset').addEventListener('click',()=>{if(!confirm('Барлық енгізілген мәліметтерді тазалаймыз ба?'))return;try{localStorage.removeItem(storedKey)}catch(e){}location.reload()});update();
+
+const originalSwitchMode=switchMode;switchMode=function(mode){const paper=mode==='paper';$('cardStudio').classList.toggle('modeHidden',!paper);$('paperMode').classList.toggle('active',paper);if(paper){$('classroomWorkspace').classList.add('modeHidden');$('teacherWorkspace').classList.add('modeHidden');$('classroomMode').classList.remove('active');$('teacherMode').classList.remove('active');document.querySelector('.workspaceHead h2').textContent='Көрнекі материалдар';document.querySelector('.workspaceHead p').textContent='Жұмыс парағы · Карточкалар · Инфографика · Таңдау тақтасы'}else originalSwitchMode(mode)};
+$('paperMode').onclick=()=>switchMode('paper');$('visualFrame').onload=()=>{const frame=$('visualFrame');const resize=()=>frame.style.height=(frame.contentDocument.documentElement.scrollHeight+24)+'px';resize();if(typeof ResizeObserver!=='undefined')new ResizeObserver(resize).observe(frame.contentDocument.body)};switchMode('paper');
+</script></body></html>
